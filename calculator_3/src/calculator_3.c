@@ -144,17 +144,27 @@ do //continuation of the cycle "while"
 			printf("enter the number by which we will multiply:\n");
 			scanf("%f", &number);
 			printf("%lf*%f, %lf*%f, %lf*%f = %lf,%lf,%lf\n" ,x1, number, y1,number, z1, number, x1*number, y1*number, z1*number);
-		}
+		} //multiplying a vector by a number
 
 		if (opv != 'm')
 		{
-		printf("enter the coordinates of the second vector\n"); //scans the coordinates of the second vector
-		printf("x2: ");
-		scanf("%lf", &x2);
-		printf("y2: ");
-		scanf("%lf", &y2);
-		printf("z2: ");
-		scanf("%lf", &z2);
+			printf("enter the coordinates of the second vector\n"); //scans the coordinates of the second vector
+			printf("x2: ");
+			scanf("%lf", &x2);
+			printf("y2: ");
+			scanf("%lf", &y2);
+			printf("z2: ");
+			scanf("%lf", &z2);
+
+			switch(opv)
+			{
+			case 's':
+				printf("%lf+%lf,%lf+%lf, %lf+%lf = %lf,%lf,%lf\n" ,x1,x2,y1,y2,z1,z2, x1+x2, y1+y2, z1+z2); //addition operation
+				break;
+			default:
+				printf("error\n");
+				break;
+			}
 		}
 
 		}
