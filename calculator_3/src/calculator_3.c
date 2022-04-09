@@ -159,7 +159,7 @@ do //continuation of the cycle "while"
 			switch(opv)
 			{
 			case 's':
-				printf("%lf+%lf,%lf+%lf, %lf+%lf = %lf,%lf,%lf\n" ,x1,x2,y1,y2,z1,z2, x1+x2, y1+y2, z1+z2); //addition operation
+				printf("%lf+%lf,%lf+%lf, %lf+%lf = %lf,%lf,%lf\n" ,x1,x2,y1,y2,z1,z2, x1+x2, y1+y2, z1+z2); //addition of vectors
 				break;
 			default:
 				printf("error\n");
