@@ -24,8 +24,8 @@
 
 
 // s - vector summation
-// p1 - scalar product
-// p2 - vector product
+// p - scalar product
+// r - vector product
 // m - multiplication of a vector by a number
 
 #include <stdio.h>
@@ -50,8 +50,8 @@ printf("^ - exponentiation\n");
 printf(" ");
 printf("vector operations:\n");
 printf("s - vector summation\n");
-printf("p1 - scalar product\n");
-printf("p2 - vector product\n");
+printf("p - scalar product\n");
+printf("r - vector product\n");
 printf("m - multiplication of a vector by a number\n");
 
 
@@ -128,7 +128,7 @@ do //continuation of the cycle "while"
 		{
 		setvbuf(stdout, NULL, _IONBF, 0);
 		setvbuf(stderr, NULL, _IONBF, 0);
-		printf("enter the operation (s, p1,  p1,  m): ");
+		printf("enter the operation (s, p,  r,  m): ");
 		scanf(" %c", &opv); //scans the operation
 
 		printf("enter the coordinates of the first vector\n"); //scans the coordinates of the first vector
@@ -161,6 +161,15 @@ do //continuation of the cycle "while"
 			case 's':
 				printf("%lf+%lf,%lf+%lf, %lf+%lf = %lf,%lf,%lf\n" ,x1,x2,y1,y2,z1,z2, x1+x2, y1+y2, z1+z2); //addition of vectors
 				break;
+			case 'p':
+				printf("%lf*%lf+%lf*%lf+%lf*%lf = %lf\n" ,x1,x2,y1,y2,z1,z2, x1*x2+y1*y2+z1*z2); //scalar product
+				break;
+				//        | i   j  k |
+				//[a,b] = | x1 y1 z1 | = i(y1*z2-y2*z1) - j(x1*z2-x2*z1) +k(x1*y2-x2*y1)=(x3,y3,z3)
+				//        | x2 y2 z2 |
+			case 'r':
+				printf("%lf*%lf-%lf*%lf,%lf*%lf-%lf*%lf,%lf*%lf-%lf*%lf = %lf,%lf,%lf\n", y1,z2,y2,z1,x1,z2,x2,z1,x1,y2,x2,y1, (y1*z2-y2*z1),-(x1*z2-x2*z1),(x1*y2-x2*y1)); //scalar product
+				break; //vector product
 			default:
 				printf("error\n");
 				break;
