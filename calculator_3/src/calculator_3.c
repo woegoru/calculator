@@ -25,10 +25,12 @@
 
 // s - vector summation
 // p - scalar product
-// r - vector product
-// m - multiplication of a vector by a number
+// r - vector difference
+
 
 #include <stdio.h>
+#include <stdlib.h>
+
 int main(int argc, char *argv[])
 {
 setvbuf(stdout, NULL, _IONBF, 0);
@@ -36,9 +38,11 @@ setvbuf(stderr, NULL, _IONBF, 0);
 
 char op, opv, rep, answer;
 int deg;
-float var1, var2, zdeg, number;
+float var1, var2, zdeg;
 long long int fac;
-double x1, x2, y1, y2, z1, z2;
+//double x1, x2, y1, y2, z1, z2;
+float *v1, *v2, *result, res;
+int size;
 
 printf("numerical operations are available:\n");
 printf("+ - addition\n");
@@ -51,8 +55,8 @@ printf(" ");
 printf("vector operations:\n");
 printf("s - vector summation\n");
 printf("p - scalar product\n");
-printf("r - vector product\n");
-printf("m - multiplication of a vector by a number\n");
+printf("r - vector difference\n");
+//printf("m - multiplication of a vector by a number\n");
 
 
 printf("will you work with vectors or numbers? (if with vectors write v, if with numbers write с)\n ");
@@ -125,60 +129,127 @@ do //continuation of the cycle "while"
 			}
 	}
 	if(answer == 'v')
-		{
+	{
 		setvbuf(stdout, NULL, _IONBF, 0);
 		setvbuf(stderr, NULL, _IONBF, 0);
-		printf("enter the operation (s, p,  r,  m): ");
+		printf("enter the operation (s, r, p): \n");
+		printf("s - vector summation\n");
+		printf("p - scalar product\n");
+		printf("r - vector difference\n");
 		scanf(" %c", &opv); //scans the operation
-
-		printf("enter the coordinates of the first vector\n"); //scans the coordinates of the first vector
-		printf("x1: ");
-		scanf("%lf", &x1);
-		printf("y1: ");
-		scanf("%lf", &y1);
-		printf("z1: ");
-		scanf("%lf", &z1);
-
-		if (opv == 'm')
+		printf("enter the size of the vectors: ");
+		scanf("%i", &size);
+		v1 = malloc(size*sizeof(int)); //sets arrays
+		v2 = malloc(size*sizeof(int));
+		result = malloc(size*sizeof(int));
+		printf("enter first vector: \n");
+		for(int i=0; i < size; i++) //scans the first vector
 		{
-			printf("enter the number by which we will multiply:\n");
-			scanf("%f", &number);
-			printf("%lf*%f, %lf*%f, %lf*%f = %lf,%lf,%lf\n" ,x1, number, y1,number, z1, number, x1*number, y1*number, z1*number);
-		} //multiplying a vector by a number
-
-		if (opv != 'm')
+			printf("enter %i coordinate: \n", i + 1);
+			scanf("%f", &v1[i]);
+		}
+		printf("enter second vector: \n"); //scans the second vector
+		for(int i=0; i < size; i++)
 		{
-			printf("enter the coordinates of the second vector\n"); //scans the coordinates of the second vector
-			printf("x2: ");
-			scanf("%lf", &x2);
-			printf("y2: ");
-			scanf("%lf", &y2);
-			printf("z2: ");
-			scanf("%lf", &z2);
+			printf("enter %i coordinate: \n", i + 1);
+			scanf("%f", &v2[i]);
+		}
 
-			switch(opv)
-			{
-			case 's':
-				printf("%lf+%lf,%lf+%lf, %lf+%lf = %lf,%lf,%lf\n" ,x1,x2,y1,y2,z1,z2, x1+x2, y1+y2, z1+z2); //addition of vectors
-				break;
-			case 'p':
-				printf("%lf*%lf+%lf*%lf+%lf*%lf = %lf\n" ,x1,x2,y1,y2,z1,z2, x1*x2+y1*y2+z1*z2); //scalar product
-				break;
+		if(opv == 's')
+		{
+			printf("result of vector addition: \n");
+			for(int i=0; i < size; i++)
+				printf("%f ", v1[i] + v2[i]);
+			printf("\n");
+		}
+
+		if(opv == 'r')
+		{
+			printf("result of vector addition: \n");
+			for(int i=0; i < size; i++)
+				printf("%f ", v1[i] - v2[i]);
+			printf("\n");
+		}
+
+		free(v1);
+		free(v2);
+		free(result);
+
+
+		//printf("enter the coordinates of the first vector\n"); //scans the coordinates of the first vector
+		//printf("x1: ");
+		//scanf("%lf", &x1);
+		//printf("y1: ");
+		//scanf("%lf", &y1);
+		//printf("z1: ");
+		//scanf("%lf", &z1);
+
+
+		//if (opv == 'm')
+		//{
+			//printf("enter the number by which we will multiply:\n");
+			//scanf("%f", &number);
+			//printf("%lf*%f, %lf*%f, %lf*%f = %lf,%lf,%lf\n" ,x1, number, y1,number, z1, number, x1*number, y1*number, z1*number);
+		//} //multiplying a vector by a number
+
+		//if (opv != 'm')
+		//{
+			//printf("enter the coordinates of the second vector\n"); //scans the coordinates of the second vector
+			//printf("x2: ");
+			//scanf("%lf", &x2);
+			//printf("y2: ");
+			//scanf("%lf", &y2);
+			//printf("z2: ");
+			//scanf("%lf", &z2);
+
+			//switch(opv)
+			//{
+			//case 's':
+				//printf("%lf+%lf,%lf+%lf, %lf+%lf = %lf,%lf,%lf\n" ,x1,x2,y1,y2,z1,z2, x1+x2, y1+y2, z1+z2); //addition of vectors
+				//break;
+			//case 'p':
+				//printf("%lf*%lf+%lf*%lf+%lf*%lf = %lf\n" ,x1,x2,y1,y2,z1,z2, x1*x2+y1*y2+z1*z2); //scalar product
+				//break;
 				//        | i   j  k |
 				//[a,b] = | x1 y1 z1 | = i(y1*z2-y2*z1) - j(x1*z2-x2*z1) +k(x1*y2-x2*y1)=(x3,y3,z3)
 				//        | x2 y2 z2 |
-			case 'r':
-				printf("%lf*%lf-%lf*%lf,%lf*%lf-%lf*%lf,%lf*%lf-%lf*%lf = %lf,%lf,%lf\n", y1,z2,y2,z1,x1,z2,x2,z1,x1,y2,x2,y1, (y1*z2-y2*z1),-(x1*z2-x2*z1),(x1*y2-x2*y1)); //scalar product
-				break; //vector product
-			default:
-				printf("error\n");
-				break;
-			}
-		}
+			//case 'r':
+				//printf("%lf*%lf-%lf*%lf,%lf*%lf-%lf*%lf,%lf*%lf-%lf*%lf = %lf,%lf,%lf\n", y1,z2,y2,z1,x1,z2,x2,z1,x1,y2,x2,y1, (y1*z2-y2*z1),-(x1*z2-x2*z1),(x1*y2-x2*y1)); //scalar product
+				//break; //vector product
+			//default:
+				//printf("error\n");
+				//break;
+			//}
+		//}
 
-		}
-	else printf("error\n");
+	}
 
+
+	//float *vector_1, *vector_2, *result, res;
+	//int size;
+	//printf("enter the size of the vectors: ");
+	//scanf("%i", &size);
+	//v1 = malloc(size*sizeof(int));
+	//v2 = malloc(size*sizeof(int));
+	//result = malloc(size*sizeof(int));
+	      //printf("enter operation: \n");
+	      //printf("1 - sum of vectors\n");
+	      //printf("2 - vector subtraction\n");
+	      //printf("3 - dot product of vectors\n");
+	      //printf("4 - cross product of vectors(only for size 3)\n");
+	      //scanf(" %c", &op);
+	     // printf("enter first vector: \n");
+	     // for(int i=0; i < size; i++)
+	      //{
+	       // printf("enter %i coordinate: \n", i + 1);
+	       // scanf("%f", &v1[i]);
+	     //}
+	      //printf("enter second vector: \n");
+	      //for(int i=0; i < size; i++)
+	      //{
+	       // printf("enter %i coordinate: \n", i + 1);
+	        //scanf("%f", &v2[i]);
+	     // }
 
 	printf("do you want to continue? (write y if yes, or n if no)\n ");
 	scanf(" %s", &rep); //reads the response
