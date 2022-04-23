@@ -165,10 +165,24 @@ do //continuation of the cycle "while"
 
 		if(opv == 'r')
 		{
-			printf("result of vector addition: \n");
+			printf("result of vector difference: \n");
 			for(int i=0; i < size; i++)
 				printf("%f ", v1[i] - v2[i]);
 			printf("\n");
+		}
+
+		if(opv == 'p')
+		{
+			printf("result of scalar product: \n");
+			for(int i=0; i < size; i++)
+			{
+				//printf("%f ", v1[i]*v2[i]);
+				res +=  v1[i]*v2[i];
+
+			printf("\n");
+			}
+		printf("%f ", res);
+		res = 0;
 		}
 
 		free(v1);
