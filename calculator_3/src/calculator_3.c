@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 3.0                                       ║
+ ║   Version     : 3.1                                       ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -61,7 +61,7 @@ long long int fac;
 float *v1, *v2, *result, res;
 int size;
 
-printf("numerical operations are available:\n");
+/*printf("numerical operations are available:\n");
 printf("+ - addition\n");
 printf("- - subtraction\n");
 printf("* - multiplication\n");
@@ -73,7 +73,7 @@ printf("vector operations:\n");
 printf("s - vector summation\n");
 printf("p - scalar product\n");
 printf("r - vector difference\n");
-
+ */
 
 
 printf("will you work with vectors or numbers? (if with vectors write v, if with numbers write с)\n ");
@@ -84,6 +84,16 @@ do //continuation of the cycle "while"
 	{
 	if(answer == 'c')
 	{
+		printf(" ");
+		printf("numerical operations are available:\n");
+		printf("+ - addition\n");
+		printf("- - subtraction\n");
+		printf("* - multiplication\n");
+		printf("/ - division\n");
+		printf("! - factorial\n");
+		printf("^ - exponentiation\n");
+		printf(" ");
+
 		printf("enter the first number: ");
 		scanf("%f", &var1); //scans the first number
 		printf("enter the operation (+,-,/,*,^,!): ");
@@ -149,10 +159,13 @@ do //continuation of the cycle "while"
 	{
 		setvbuf(stdout, NULL, _IONBF, 0);
 		setvbuf(stderr, NULL, _IONBF, 0);
-		printf("enter the operation (s, r, p): \n");
+
+		printf("vector operations:\n");
 		printf("s - vector summation\n");
 		printf("p - scalar product\n");
 		printf("r - vector difference\n");
+
+		printf("enter the operation (s, r, p): \n");
 		scanf(" %c", &opv); //scans the operation
 		printf("enter the size of the vectors: ");
 		scanf("%i", &size);
