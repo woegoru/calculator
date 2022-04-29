@@ -84,15 +84,15 @@ do //continuation of the cycle "while"
 	{
 	if(answer == 'c')
 	{
-		printf(" ");
-		printf("numerical operations are available:\n");
-		printf("+ - addition\n");
-		printf("- - subtraction\n");
-		printf("* - multiplication\n");
-		printf("/ - division\n");
-		printf("! - factorial\n");
-		printf("^ - exponentiation\n");
-		printf(" ");
+		printf(" ╔══════════════════════════════════════════╗\n ");
+		printf("║   numerical operations are available:    ║\n ");
+		printf("║   + - addition                           ║\n ");
+		printf("║   - - subtraction                        ║\n ");
+		printf("║   * - multiplication                     ║\n ");
+		printf("║   / - division                           ║\n ");
+		printf("║   ! - factorial                          ║\n ");
+		printf("║   ^ - exponentiation                     ║\n ");
+		printf("╚══════════════════════════════════════════╝\n ");
 
 		printf("enter the first number: ");
 		scanf("%f", &var1); //scans the first number
