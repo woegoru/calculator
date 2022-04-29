@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 3.1                                       ║
+ ║   Version     : 3.4                                       ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -76,12 +76,14 @@ printf("r - vector difference\n");
  */
 
 
-printf("will you work with vectors or numbers? (if with vectors write v, if with numbers write с)\n ");
-scanf(" %s", &answer);
+
 
 
 do //continuation of the cycle "while"
 	{
+	printf("will you work with vectors or numbers? (if with vectors write v, if with numbers write с)\n ");
+	scanf(" %s", &answer);
+
 	if(answer == 'c')
 	{
 		printf(" ╔══════════════════════════════════════════╗\n ");
