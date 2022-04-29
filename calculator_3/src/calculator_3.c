@@ -58,7 +58,7 @@ FILE *input, *output;
 input = fopen("input.txt", "r");
 output = fopen("output.txt", "w");
 
-char op, opv, rep, answer;
+char op, opv, rep, answer, data;
 int deg;
 float var1, var2, zdeg;
 long long int fac;
@@ -68,10 +68,14 @@ int size;
 
 do //continuation of the cycle "while"
 	{
-	fprintf(output, "will you work with vectors or numbers? (if with vectors write v, if with numbers write с)\n ");
-	fscanf(input, " %s", &answer);
+	fscanf(input, " %c", &op);
+	fscanf(input, " %c", &data);
 
-	if(answer == 'c')
+
+	//fprintf(output, "will you work with vectors or numbers? (if with vectors write v, if with numbers write с)\n ");
+	//fscanf(input, " %s", &answer);
+
+	if(data == 's')
 	{
 		/*printf(" ╔══════════════════════════════════════════╗\n ");
 		printf("║   numerical operations are available:    ║\n ");
@@ -144,66 +148,92 @@ do //continuation of the cycle "while"
 			}
 			}
 	}
-	if(answer == 'v')
+	if(data == 'v')
 	{
 		setvbuf(stdout, NULL, _IONBF, 0);
 		setvbuf(stderr, NULL, _IONBF, 0);
-
-		/*printf(" ╔════════════════════════════════════════════╗\n ");
-		printf("║  vector operations are available:          ║\n");
-		printf(" ║  s - vector summation                      ║\n");
-		printf(" ║  p - scalar product                        ║\n");
-		printf(" ║  r - vector difference                     ║\n");
-		printf(" ╚════════════════════════════════════════════╝\n ");
-*/
-		fprintf(output, "enter the operation (s, r, p): \n");
-		fscanf(input, " %c", &opv); //scans the operation
-		fprintf(output, "enter the size of the vectors: ");
 		fscanf(input, "%i", &size);
 		v1 = malloc(size*sizeof(int)); //sets arrays
 		v2 = malloc(size*sizeof(int));
 		result = malloc(size*sizeof(int));
-		fprintf(output,"enter first vector: \n");
-		for(int i=0; i < size; i++) //scans the first vector
-		{
-			fprintf(output,"enter %i coordinate: \n", i + 1);
-			fscanf(input, "%f", &v1[i]);
-		}
-		fprintf(output,"enter second vector: \n"); //scans the second vector
+		fprintf(output,"(");
 		for(int i=0; i < size; i++)
 		{
-			fprintf(output,"enter %i coordinate: \n", i + 1);
+			fscanf(input, "%f", &v1[i]);
+			fprintf(output, " %f", v1[i]);
+		}
+		fprintf(output," ) ");
+
+		fprintf(output,"%c", op);
+		fprintf(output," (");
+		for(int i=0; i < size; i++)
+		{
 			fscanf(input, "%f", &v2[i]);
+			fprintf(output, " %f", v2[i]);
 		}
+		fprintf(output," ) = ");
 
-		if(opv == 's')
-		{
-			fprintf(output,"result of vector addition: \n");
-			for(int i=0; i < size; i++)
-				fprintf(output,"%f ", v1[i] + v2[i]);
-			fprintf(output,"\n");
-		}
+		//fprintf(output, "enter the operation (s, r, p): \n");
+		//fscanf(input, " %c", &opv); //scans the operation
+		//fprintf(output, "enter the size of the vectors: ");
 
-		if(opv == 'r')
-		{
-			fprintf(output,"result of vector difference: \n");
-			for(int i=0; i < size; i++)
-				fprintf(output,"%f ", v1[i] - v2[i]);
-			fprintf(output,"\n");
-		}
 
-		if(opv == 'p')
+		//fprintf(output,"enter first vector: \n");
+		//for(int i=0; i < size; i++) //scans the first vector
+		//{
+		//	fprintf(output,"enter %i coordinate: \n", i + 1);
+		//	fscanf(input, "%f", &v1[i]);
+		//}
+		//fprintf(output,"enter second vector: \n"); //scans the second vector
+		//for(int i=0; i < size; i++)
+		//{
+		//	fprintf(output,"enter %i coordinate: \n", i + 1);
+		//	fscanf(input, "%f", &v2[i]);
+	//}
+
+		if(op == '+')
 		{
-			fprintf(output,"result of scalar product: \n");
+			//fprintf(output,"result of vector addition: \n");
+			fprintf(output, "( ");
 			for(int i=0; i < size; i++)
 			{
-
-				res +=  v1[i]*v2[i];
-
-			fprintf(output,"\n");
+				result[i] = v1[i] + v2[i];
+				fprintf(output,"%f", result[i]);
 			}
-		fprintf(output,"%f ", res);
-		res = 0;
+			fprintf(output, ") ");
+		}
+
+		if(op == '-')
+		{
+			fprintf(output, "( ");
+			for(int i=0; i < size; i++)
+			{
+				result[i] = v1[i] - v2[i];
+				fprintf(output,"%f", result[i]);
+			}
+			fprintf(output, ") ");
+		}
+
+		if(op == '*')
+		{
+			fprintf(output, "( ");
+			for(int i=0; i < size; i++)
+			{
+				result[i] = v1[i] - v2[i];
+				fprintf(output,"%f", result[i]);
+			}
+			fprintf(output, ") ");
+
+		//if(op == '*')
+		//{
+			//fprintf(output, "( ");
+			//for(int i=0; i < size; i++)
+			//{
+			//	result[i] = v1[i] - v2[i];
+			//	fprintf(output,"%f", result[i]);
+			//}
+			//fprintf(output, ") ");
+		//}
 		}
 
 		free(v1);
