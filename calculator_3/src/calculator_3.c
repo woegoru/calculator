@@ -160,10 +160,12 @@ do //continuation of the cycle "while"
 		setvbuf(stdout, NULL, _IONBF, 0);
 		setvbuf(stderr, NULL, _IONBF, 0);
 
-		printf("vector operations:\n");
-		printf("s - vector summation\n");
-		printf("p - scalar product\n");
-		printf("r - vector difference\n");
+		printf(" ╔════════════════════════════════════════════╗\n ");
+		printf("║  vector operations are available:          ║\n");
+		printf(" ║  s - vector summation                      ║\n");
+		printf(" ║  p - scalar product                        ║\n");
+		printf(" ║  r - vector difference                     ║\n");
+		printf(" ╚════════════════════════════════════════════╝\n ");
 
 		printf("enter the operation (s, r, p): \n");
 		scanf(" %c", &opv); //scans the operation
