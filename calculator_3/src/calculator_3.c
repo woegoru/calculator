@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 3.4                                       ║
+ ║   Version     : 4.2                                       ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -32,19 +32,6 @@
 ╚════════════════════════════════════════════════════════════════════════════╝
  */
 
-//operations:
-//+ - addition
-//- - subtraction
-//* - multiplication
-/// - division
-//! - factorial
-//^ - exponentiation
-
-
-// s - vector summation
-// p - scalar product
-// r - vector difference
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,46 +45,33 @@ FILE *input, *output;
 input = fopen("input.txt", "r");
 output = fopen("output.txt", "w");
 
-char op, opv, rep, answer, data;
+char op, data;
 int deg;
 float var1, var2, zdeg;
 long long int fac;
-float *v1, *v2, *result, res;
+float *v1, *v2, *result;
 int size;
 
 
-do //continuation of the cycle "while"
+//do //continuation of the cycle "while"
 	{
 	fscanf(input, " %c", &op);
 	fscanf(input, " %c", &data);
 
 
-	//fprintf(output, "will you work with vectors or numbers? (if with vectors write v, if with numbers write с)\n ");
-	//fscanf(input, " %s", &answer);
-
 	if(data == 's')
 	{
-		/*printf(" ╔══════════════════════════════════════════╗\n ");
-		printf("║   numerical operations are available:    ║\n ");
-		printf("║   + - addition                           ║\n ");
-		printf("║   - - subtraction                        ║\n ");
-		printf("║   * - multiplication                     ║\n ");
-		printf("║   / - division                           ║\n ");
-		printf("║   ! - factorial                          ║\n ");
-		printf("║   ^ - exponentiation                     ║\n ");
-		printf("╚══════════════════════════════════════════╝\n ");
-*/
-		fprintf(output, "enter the first number: ");
+		//fprintf(output, "enter the first number: ");
 		fscanf(input, "%f", &var1); //scans the first number
-		fprintf(output, "enter the operation (+,-,/,*,^,!): ");
-		fscanf(input, " %c", &op); //scans the operation
+		//fprintf(output, "enter the operation (+,-,/,*,^,!): ");
+		//fscanf(input, " %c", &op); //scans the operation
 		if (op == '^' || op == '!')
 		{
 			switch(op) //if the degree of a number or a factorial, then the second variable is not needed
 			{
 			case '^':
 				zdeg = 1; //the result of exponentiation is stored here
-				fprintf(output,"enter the degree of the number: ");
+				//fprintf(output,"enter the degree of the number: ");
 				fscanf(input, "%i", &deg);//reads the power of a number
 				if (deg == 0) fprintf(output,"%f^%i = 1\n", var1, deg); //if the degree is 0
 				else if (deg > 0) //if the degree is greater than 0
@@ -125,11 +99,10 @@ do //continuation of the cycle "while"
 		}
 		else
 			{
-			fprintf(output, "enter the second number: ");
+			//fprintf(output, "enter the second number: ");
 			fscanf(input, "%f", &var2); //scans the second number
 			switch(op)
 			{
-
 			case '+':
 				fprintf(output, "%f+%f = %f\n" , var1, var2, var1+var2); //addition operation
 				break;
@@ -198,7 +171,7 @@ do //continuation of the cycle "while"
 			for(int i=0; i < size; i++)
 			{
 				result[i] = v1[i] + v2[i];
-				fprintf(output,"%f", result[i]);
+				fprintf(output,"%f ", result[i]);
 			}
 			fprintf(output, ") ");
 		}
@@ -209,7 +182,7 @@ do //continuation of the cycle "while"
 			for(int i=0; i < size; i++)
 			{
 				result[i] = v1[i] - v2[i];
-				fprintf(output,"%f", result[i]);
+				fprintf(output,"%f ", result[i]);
 			}
 			fprintf(output, ") ");
 		}
@@ -220,7 +193,7 @@ do //continuation of the cycle "while"
 			for(int i=0; i < size; i++)
 			{
 				result[i] = v1[i] - v2[i];
-				fprintf(output,"%f", result[i]);
+				fprintf(output,"%f ", result[i]);
 			}
 			fprintf(output, ") ");
 
@@ -241,10 +214,10 @@ do //continuation of the cycle "while"
 		free(result);
 	}
 
-	fprintf(output,"do you want to continue? (write y if yes, or n if no)\n ");
-	fscanf(input, " %s", &rep); //reads the response
+//	fprintf(output,"do you want to continue? (write y if yes, or n if no)\n ");
+//	fscanf(input, " %s", &rep); //reads the response
 	}
-while(rep == 'y'); //start of the cycle
+//while(rep == 'y'); //start of the cycle
 
 fprintf(output, "thank you for your cooperation!");
 
