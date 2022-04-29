@@ -1,18 +1,36 @@
 /*
- ============================================================================
- Name        : calculator_3.c
- Author      : Darya K
- Version     :
- Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
- ============================================================================
+ ╔═════════════════════════[ХХХ]═════════════════════════════╗
+ ║   Name        : calculator_3.c                            ║
+ ║   Author      : Darya K  (https://github.com/Grief3749)   ║
+ ║   Version     : 3.0                                       ║
+ ║   Copyright   : all rights reserved                       ║
+ ║   Description : calculator of numbers and vectors in C    ║
+ ╚═══════════════════════════════════════════════════════════╝
  */
 
-//the calculator program performs 6 operations with two numbers
-
-//manual: at the beginning, the calculator displays a list of available operations
-//two numbers are entered from the keyboard and the operation to be performed on these numbers.
-//the calculator performs actions with numbers and outputs the answer
+/*
+╔═══════════════════════════════[DESCRIPTION]════════════════════════════════╗
+║  the calculator program performs 6 operations with two numbers as well     ║
+║  as operations with vectors                                                ║
+║                                                                            ║
+║  MANUAL: at the beginning, the calculator prompts the user to choose       ║
+║  whether he wants to work with numbers or vectors                          ║
+║  further, in accordance with the selected block, the program displays      ║
+║  a list of available operations                                            ║
+║                                                                            ║
+║  if the user has chosen to work with numbers, the program requests the     ║
+║  first number, then the operation,                                         ║
+║  and depending on the operation, requests the second number, if necessary  ║
+║                                                                            ║
+║  if the user has chosen to work with vectors, the program requests an      ║
+║  operation, and then two vectors                                           ║
+║                                                                            ║
+║  the calculator performs actions and outputs the result                    ║
+║                                                                            ║
+║  WARNING: if you enter something not according to the instructions,        ║
+║  the program will give an error                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+ */
 
 //operations:
 //+ - addition
@@ -40,7 +58,6 @@ char op, opv, rep, answer;
 int deg;
 float var1, var2, zdeg;
 long long int fac;
-//double x1, x2, y1, y2, z1, z2;
 float *v1, *v2, *result, res;
 int size;
 
@@ -56,7 +73,7 @@ printf("vector operations:\n");
 printf("s - vector summation\n");
 printf("p - scalar product\n");
 printf("r - vector difference\n");
-//printf("m - multiplication of a vector by a number\n");
+
 
 
 printf("will you work with vectors or numbers? (if with vectors write v, if with numbers write с)\n ");
@@ -176,7 +193,7 @@ do //continuation of the cycle "while"
 			printf("result of scalar product: \n");
 			for(int i=0; i < size; i++)
 			{
-				//printf("%f ", v1[i]*v2[i]);
+
 				res +=  v1[i]*v2[i];
 
 			printf("\n");
@@ -190,80 +207,11 @@ do //continuation of the cycle "while"
 		free(result);
 
 
-		//printf("enter the coordinates of the first vector\n"); //scans the coordinates of the first vector
-		//printf("x1: ");
-		//scanf("%lf", &x1);
-		//printf("y1: ");
-		//scanf("%lf", &y1);
-		//printf("z1: ");
-		//scanf("%lf", &z1);
-
-
-		//if (opv == 'm')
-		//{
-			//printf("enter the number by which we will multiply:\n");
-			//scanf("%f", &number);
-			//printf("%lf*%f, %lf*%f, %lf*%f = %lf,%lf,%lf\n" ,x1, number, y1,number, z1, number, x1*number, y1*number, z1*number);
-		//} //multiplying a vector by a number
-
-		//if (opv != 'm')
-		//{
-			//printf("enter the coordinates of the second vector\n"); //scans the coordinates of the second vector
-			//printf("x2: ");
-			//scanf("%lf", &x2);
-			//printf("y2: ");
-			//scanf("%lf", &y2);
-			//printf("z2: ");
-			//scanf("%lf", &z2);
-
-			//switch(opv)
-			//{
-			//case 's':
-				//printf("%lf+%lf,%lf+%lf, %lf+%lf = %lf,%lf,%lf\n" ,x1,x2,y1,y2,z1,z2, x1+x2, y1+y2, z1+z2); //addition of vectors
-				//break;
-			//case 'p':
-				//printf("%lf*%lf+%lf*%lf+%lf*%lf = %lf\n" ,x1,x2,y1,y2,z1,z2, x1*x2+y1*y2+z1*z2); //scalar product
-				//break;
-				//        | i   j  k |
-				//[a,b] = | x1 y1 z1 | = i(y1*z2-y2*z1) - j(x1*z2-x2*z1) +k(x1*y2-x2*y1)=(x3,y3,z3)
-				//        | x2 y2 z2 |
-			//case 'r':
-				//printf("%lf*%lf-%lf*%lf,%lf*%lf-%lf*%lf,%lf*%lf-%lf*%lf = %lf,%lf,%lf\n", y1,z2,y2,z1,x1,z2,x2,z1,x1,y2,x2,y1, (y1*z2-y2*z1),-(x1*z2-x2*z1),(x1*y2-x2*y1)); //scalar product
-				//break; //vector product
-			//default:
-				//printf("error\n");
-				//break;
-			//}
-		//}
 
 	}
 
 
-	//float *vector_1, *vector_2, *result, res;
-	//int size;
-	//printf("enter the size of the vectors: ");
-	//scanf("%i", &size);
-	//v1 = malloc(size*sizeof(int));
-	//v2 = malloc(size*sizeof(int));
-	//result = malloc(size*sizeof(int));
-	      //printf("enter operation: \n");
-	      //printf("1 - sum of vectors\n");
-	      //printf("2 - vector subtraction\n");
-	      //printf("3 - dot product of vectors\n");
-	      //printf("4 - cross product of vectors(only for size 3)\n");
-	      //scanf(" %c", &op);
-	     // printf("enter first vector: \n");
-	     // for(int i=0; i < size; i++)
-	      //{
-	       // printf("enter %i coordinate: \n", i + 1);
-	       // scanf("%f", &v1[i]);
-	     //}
-	      //printf("enter second vector: \n");
-	      //for(int i=0; i < size; i++)
-	      //{
-	       // printf("enter %i coordinate: \n", i + 1);
-	        //scanf("%f", &v2[i]);
-	     // }
+
 
 	printf("do you want to continue? (write y if yes, or n if no)\n ");
 	scanf(" %s", &rep); //reads the response
