@@ -54,6 +54,10 @@ int main(int argc, char *argv[])
 setvbuf(stdout, NULL, _IONBF, 0);
 setvbuf(stderr, NULL, _IONBF, 0);
 
+FILE *input, *output;
+input = fopen("input.txt", "r");
+output = fopen("output.txt", "w");
+
 char op, opv, rep, answer;
 int deg;
 float var1, var2, zdeg;
@@ -61,32 +65,15 @@ long long int fac;
 float *v1, *v2, *result, res;
 int size;
 
-/*printf("numerical operations are available:\n");
-printf("+ - addition\n");
-printf("- - subtraction\n");
-printf("* - multiplication\n");
-printf("/ - division\n");
-printf("! - factorial\n");
-printf("^ - exponentiation\n");
-printf(" ");
-printf("vector operations:\n");
-printf("s - vector summation\n");
-printf("p - scalar product\n");
-printf("r - vector difference\n");
- */
-
-
-
-
 
 do //continuation of the cycle "while"
 	{
-	printf("will you work with vectors or numbers? (if with vectors write v, if with numbers write с)\n ");
-	scanf(" %s", &answer);
+	fprintf(output, "will you work with vectors or numbers? (if with vectors write v, if with numbers write с)\n ");
+	fscanf(input, " %s", &answer);
 
 	if(answer == 'c')
 	{
-		printf(" ╔══════════════════════════════════════════╗\n ");
+		/*printf(" ╔══════════════════════════════════════════╗\n ");
 		printf("║   numerical operations are available:    ║\n ");
 		printf("║   + - addition                           ║\n ");
 		printf("║   - - subtraction                        ║\n ");
@@ -95,64 +82,64 @@ do //continuation of the cycle "while"
 		printf("║   ! - factorial                          ║\n ");
 		printf("║   ^ - exponentiation                     ║\n ");
 		printf("╚══════════════════════════════════════════╝\n ");
-
-		printf("enter the first number: ");
-		scanf("%f", &var1); //scans the first number
-		printf("enter the operation (+,-,/,*,^,!): ");
-		scanf(" %c", &op); //scans the operation
+*/
+		fprintf(output, "enter the first number: ");
+		fscanf(input, "%f", &var1); //scans the first number
+		fprintf(output, "enter the operation (+,-,/,*,^,!): ");
+		fscanf(input, " %c", &op); //scans the operation
 		if (op == '^' || op == '!')
 		{
 			switch(op) //if the degree of a number or a factorial, then the second variable is not needed
 			{
 			case '^':
 				zdeg = 1; //the result of exponentiation is stored here
-				printf("enter the degree of the number: ");
-				scanf("%i", &deg);//reads the power of a number
-				if (deg == 0) printf("%f^%i = 1\n", var1, deg); //if the degree is 0
+				fprintf(output,"enter the degree of the number: ");
+				fscanf(input, "%i", &deg);//reads the power of a number
+				if (deg == 0) fprintf(output,"%f^%i = 1\n", var1, deg); //if the degree is 0
 				else if (deg > 0) //if the degree is greater than 0
 					{
 					for(int i = 1; i <= deg; i++)
 						zdeg = zdeg * var1;
-					printf("%f^%i = %f\n", var1, deg, zdeg);
+					fprintf(output,"%f^%i = %f\n", var1, deg, zdeg);
 					}
 				break;
 			case '!': //factorial of a number
 				fac = 1; //the result of the factorial is stored here
-				if (var1 < 0) printf("error"); //the factorial of negative numbers does not exist
-				else if (var1 == 0) printf("%f! = 1\n", var1);
+				if (var1 < 0) fprintf(output, "error"); //the factorial of negative numbers does not exist
+				else if (var1 == 0) fprintf(output, "%f! = 1\n", var1);
 				else
 					{
 					for(int i = 1; i <= var1; i++)
 						fac = fac*i;
-					printf("%f! = %I64i\n", var1, fac);
+					fprintf(output, "%f! = %I64i\n", var1, fac);
 					}
 				break;
 			default:
-				printf("error\n");
+				fprintf(output, "error\n");
 				break;
 			}
 		}
 		else
 			{
-			printf("enter the second number: ");
-			scanf("%f", &var2); //scans the second number
+			fprintf(output, "enter the second number: ");
+			fscanf(input, "%f", &var2); //scans the second number
 			switch(op)
 			{
 
 			case '+':
-				printf("%f+%f = %f\n" , var1, var2, var1+var2); //addition operation
+				fprintf(output, "%f+%f = %f\n" , var1, var2, var1+var2); //addition operation
 				break;
 			case '-':
-				printf("%f-%f = %f\n" , var1, var2, var1-var2); //subtraction operation
+				fprintf(output, "%f-%f = %f\n" , var1, var2, var1-var2); //subtraction operation
 				break;
 			case '*':
-				printf("%f*%f = %f\n" , var1, var2, var1*var2); //multiplication operation
+				fprintf(output, "%f*%f = %f\n" , var1, var2, var1*var2); //multiplication operation
 				break;
 			case '/':
-				printf("%f/%f = %f\n" , var1, var2, var1/var2); //division operation
+				fprintf(output, "%f/%f = %f\n" , var1, var2, var1/var2); //division operation
 				break;
 			default:
-				printf("error\n");
+				fprintf(output, "error\n");
 				break;
 			}
 			}
@@ -162,80 +149,77 @@ do //continuation of the cycle "while"
 		setvbuf(stdout, NULL, _IONBF, 0);
 		setvbuf(stderr, NULL, _IONBF, 0);
 
-		printf(" ╔════════════════════════════════════════════╗\n ");
+		/*printf(" ╔════════════════════════════════════════════╗\n ");
 		printf("║  vector operations are available:          ║\n");
 		printf(" ║  s - vector summation                      ║\n");
 		printf(" ║  p - scalar product                        ║\n");
 		printf(" ║  r - vector difference                     ║\n");
 		printf(" ╚════════════════════════════════════════════╝\n ");
-
-		printf("enter the operation (s, r, p): \n");
-		scanf(" %c", &opv); //scans the operation
-		printf("enter the size of the vectors: ");
-		scanf("%i", &size);
+*/
+		fprintf(output, "enter the operation (s, r, p): \n");
+		fscanf(input, " %c", &opv); //scans the operation
+		fprintf(output, "enter the size of the vectors: ");
+		fscanf(input, "%i", &size);
 		v1 = malloc(size*sizeof(int)); //sets arrays
 		v2 = malloc(size*sizeof(int));
 		result = malloc(size*sizeof(int));
-		printf("enter first vector: \n");
+		fprintf(output,"enter first vector: \n");
 		for(int i=0; i < size; i++) //scans the first vector
 		{
-			printf("enter %i coordinate: \n", i + 1);
-			scanf("%f", &v1[i]);
+			fprintf(output,"enter %i coordinate: \n", i + 1);
+			fscanf(input, "%f", &v1[i]);
 		}
-		printf("enter second vector: \n"); //scans the second vector
+		fprintf(output,"enter second vector: \n"); //scans the second vector
 		for(int i=0; i < size; i++)
 		{
-			printf("enter %i coordinate: \n", i + 1);
-			scanf("%f", &v2[i]);
+			fprintf(output,"enter %i coordinate: \n", i + 1);
+			fscanf(input, "%f", &v2[i]);
 		}
 
 		if(opv == 's')
 		{
-			printf("result of vector addition: \n");
+			fprintf(output,"result of vector addition: \n");
 			for(int i=0; i < size; i++)
-				printf("%f ", v1[i] + v2[i]);
-			printf("\n");
+				fprintf(output,"%f ", v1[i] + v2[i]);
+			fprintf(output,"\n");
 		}
 
 		if(opv == 'r')
 		{
-			printf("result of vector difference: \n");
+			fprintf(output,"result of vector difference: \n");
 			for(int i=0; i < size; i++)
-				printf("%f ", v1[i] - v2[i]);
-			printf("\n");
+				fprintf(output,"%f ", v1[i] - v2[i]);
+			fprintf(output,"\n");
 		}
 
 		if(opv == 'p')
 		{
-			printf("result of scalar product: \n");
+			fprintf(output,"result of scalar product: \n");
 			for(int i=0; i < size; i++)
 			{
 
 				res +=  v1[i]*v2[i];
 
-			printf("\n");
+			fprintf(output,"\n");
 			}
-		printf("%f ", res);
+		fprintf(output,"%f ", res);
 		res = 0;
 		}
 
 		free(v1);
 		free(v2);
 		free(result);
-
-
-
 	}
 
-
-
-
-	printf("do you want to continue? (write y if yes, or n if no)\n ");
-	scanf(" %s", &rep); //reads the response
+	fprintf(output,"do you want to continue? (write y if yes, or n if no)\n ");
+	fscanf(input, " %s", &rep); //reads the response
 	}
 while(rep == 'y'); //start of the cycle
 
-printf("thank you for your cooperation!");
+fprintf(output, "thank you for your cooperation!");
+
+fclose(input);
+fclose(output);
 
 return 0;
 
