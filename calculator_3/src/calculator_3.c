@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
 setvbuf(stdout, NULL, _IONBF, 0);
 setvbuf(stderr, NULL, _IONBF, 0);
 
-char rep = 'n';
-do
+//char rep = 'n';
+//do
 {
 	//working with a file
 	FILE *input, *output;
@@ -182,11 +182,13 @@ do
 			free(v2);
 			free(result);
 	}
+
+
 	fclose(input);
 	fclose(output);
 
 }
-	while(rep == 'y');
+	//while(rep == 'y');
 	return 0;
 
 }
