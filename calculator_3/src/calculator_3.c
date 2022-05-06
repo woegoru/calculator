@@ -156,7 +156,7 @@ do
 					result[i] = v1[i] + v2[i];
 					fprintf(output,"%f ", result[i]);
 				}
-				fprintf(output, ") ");
+				fprintf(output, ")\n");
 			}
 
 			if(op == '-') //difference
@@ -167,7 +167,7 @@ do
 					result[i] = v1[i] - v2[i];
 					fprintf(output,"%f ", result[i]);
 				}
-				fprintf(output, ") ");
+				fprintf(output, ")\n");
 			}
 
 			if(op == '*') //multiplication operation
@@ -175,10 +175,10 @@ do
 				fprintf(output, "( ");
 				for(int i=0; i < size; i++)
 				{
-					result[i] = v1[i] - v2[i];
+					result[i] = v1[i] * v2[i];
 					fprintf(output,"%f ", result[i]);
 				}
-				fprintf(output, ") ");
+				fprintf(output, ")\n");
 			}
 
 			free(v1);
