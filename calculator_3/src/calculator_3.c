@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 4.2                                       ║
+ ║   Version     : 5.2                                       ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -36,6 +36,84 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+struct inital_data{
+	char op, mode;
+	int size;
+	float *data;
+};
+
+typedef struct main_list{
+	struct inital_data data;
+	struct main_list *next, *previous, *head, *tail;
+}list;
+
+list* new_list(struct inital_data, inital_data){
+	list* new_list = malloc(sizeof(list));
+	new_list->data = inital_data;
+	new_list->next = NULL;
+	return new_list;
+}
+
+void addfirst(list **headlist, struct inital_data inital_data){
+	list* extlist = *headlist;
+	list* newelement = new_list(inital_data);
+	newelement->data = inital_data;
+	newelement->head = newelement;
+	newelement->next = extlist;
+	extlist->previous = newelement;
+	while(newelement->next != NULL){
+		newelement = newelement->next;
+		newelement->head = newelement->previous->head;
+	}
+	newelement = newelement->head;
+	*headlist = newelement;
+}
+
+void addlast(list **headlist, struct inital_data inital_data){
+	list* extlist = *headlist;
+	list* newelement = newContainer();
+	newelement->data = inital_data;
+	while(extlist->next != NULL){
+		extlist = extlist->next;
+	}
+	newelement->previous = extlist;
+	extlist->next = newelement;
+	newelement->head = extlist->head;
+	newelement = newelement->head;
+	*headlist = newelement;
+}
+
+void addtolist(list **headlist, struct inital_data inital_data, int number){
+	list* extlist = *headlist;
+	list* newelement = newContainer();
+	int counter = 0;
+	if(is_empty(&extlist) == 0){
+		extlist->data = inital_data;
+		extlist->head = extlist;
+	}
+	else if(number == -1){
+		addfirst(&extlist, inital_data);
+	}
+	else if(number == elementcounter(&extlist) - 1){
+		addlast(&extlist, inital_data);
+	}
+	else{
+		while(number != counter){
+			counter++;
+			extlist = extlist->next;
+		}
+		newelement->data = inital_data;
+		newelement->previous = extlist;
+		newelement->next = extlist->next;
+		extlist->next->previous = newelement;
+		extlist->next = newelement;
+		newelement->head = extlist->head;
+		extlist = extlist->head;
+	}
+	*headlist = extlist;
+
+}
+
 int main(int argc, char *argv[])
 {
 setvbuf(stdout, NULL, _IONBF, 0);
@@ -50,22 +128,24 @@ do
 	input = fopen("input.txt", "r");
 	output = fopen("output.txt", "w");
 
+	struct inital_data elem;
+	list *inital_data = new_list(elem);
+
 	//declaring variables
-	char op, data;
-	int deg;
-	float var1, var2, zdeg;
-	long long int fac;
-	float *v1, *v2, *result;
-	int size;
+	//char op, data;
+	//int deg;
+	//float var1, var2, zdeg;
+	//long long int fac;
+	//float *v1, *v2, *result;
+	//int size;
 
 	while(feof(input) == 0)
 	{
-
-		fscanf(input, " %c", &op);
-		fscanf(input, " %c", &data);
+		fscanf(input, " %c", &elem.op);
+		fscanf(input, " %c", &elem.mode);
 
 		//working with numbers
-		if(data == 's')
+		/*if(data == 's')
 		{
 			fscanf(input, "%f", &var1);
 			if (op == '^' || op == '!')
@@ -123,21 +203,41 @@ do
 				}
 				}
 		}
-		if(data == 'v') //working with vectors
+		*/
+		if(elem.mode == 'v') //working with vectors
 		{
-			setvbuf(stdout, NULL, _IONBF, 0);
-			setvbuf(stderr, NULL, _IONBF, 0);
-			fscanf(input, "%i", &size);
-			v1 = malloc(size*sizeof(int)); //the first vector is set
-			v2 = malloc(size*sizeof(int)); //the second vector is set
-			result = malloc(size*sizeof(int));
-			fprintf(output,"("); //entering vectors
-			for(int i=0; i < size; i++)
+			//setvbuf(stdout, NULL, _IONBF, 0);
+			//setvbuf(stderr, NULL, _IONBF, 0);
+			fscanf(input, "%i", &elem.size);
+			elem.data = malloc(elem.size*sizeof(double));
+			//v1 = malloc(size*sizeof(int)); //the first vector is set
+			//v2 = malloc(size*sizeof(int)); //the second vector is set
+			//result = malloc(size*sizeof(int));
+			//fprintf(output,"("); //entering vectors
+			for(int i=0; i < elem.size*2; i++)
 			{
-				fscanf(input, "%f", &v1[i]);
-				fprintf(output, " %f", v1[i]);
+				fscanf(input, "%f", &elem.data[i]);
+				//fprintf(output, " %f", v1[i]);
 			}
-			fprintf(output," ) ");
+			//fprintf(output," ) ");
+			addlast(&inital_data, elem);
+		}
+		else if(elem.mode == 's')
+		{
+			if(elem.op == '!')
+			{
+				elem.data = malloc(sizeof(double));
+				fscanf(input, "%f", &elem.data[0]);
+			}
+			else
+			{
+				elem.data = malloc(sizeof(double)*2);
+				fscanf(input, "%f", &elem.data[0]);
+				fscanf(input, "%f", &elem.data[1]);
+			}
+			addlast(&inital_data, elem);
+		}
+	}
 
 			fprintf(output,"%c", op);
 			fprintf(output," (");
