@@ -41,8 +41,9 @@ int main(int argc, char *argv[])
 setvbuf(stdout, NULL, _IONBF, 0);
 setvbuf(stderr, NULL, _IONBF, 0);
 
-//char rep = 'n';
-//do
+char rep = 'n';
+do
+{
 {
 	//working with a file
 	FILE *input, *output;
@@ -57,6 +58,8 @@ setvbuf(stderr, NULL, _IONBF, 0);
 	float *v1, *v2, *result;
 	int size;
 
+	while(feof(input) == 0)
+	{
 
 		fscanf(input, " %c", &op);
 		fscanf(input, " %c", &data);
@@ -182,13 +185,13 @@ setvbuf(stderr, NULL, _IONBF, 0);
 			free(v2);
 			free(result);
 	}
-
-
+	}
 	fclose(input);
 	fclose(output);
-
 }
-	//while(rep == 'y');
+
+	}
+	while(rep == 'y');
 	return 0;
 
 }
