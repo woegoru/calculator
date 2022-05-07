@@ -47,11 +47,34 @@ typedef struct main_list{
 	struct main_list *next, *previous, *head, *tail;
 }list;
 
-list* new_list(struct inital_data, inital_data){
+list* new_list(struct inital_data inital_data){
 	list* new_list = malloc(sizeof(list));
 	new_list->data = inital_data;
 	new_list->next = NULL;
 	return new_list;
+}
+
+int is_empty(list **headcontainer){
+	list* extcontainer = *headcontainer;
+	if(extcontainer->head == NULL){
+		return 0;
+	}
+	else return 1;
+}
+
+int elementcounter(list **headcontainer){
+	list* extcontainer = *headcontainer;
+	int counter = 0;
+	if(is_empty(&extcontainer) == 0){
+		return counter;
+	}
+	else{
+		while(extcontainer != NULL){
+			counter++;
+			extcontainer = extcontainer->next;
+		}
+		return counter;
+	}
 }
 
 void addfirst(list **headlist, struct inital_data inital_data){
@@ -71,7 +94,7 @@ void addfirst(list **headlist, struct inital_data inital_data){
 
 void addlast(list **headlist, struct inital_data inital_data){
 	list* extlist = *headlist;
-	list* newelement = newContainer();
+	list* newelement = new_list(inital_data);
 	newelement->data = inital_data;
 	while(extlist->next != NULL){
 		extlist = extlist->next;
@@ -85,7 +108,7 @@ void addlast(list **headlist, struct inital_data inital_data){
 
 void addtolist(list **headlist, struct inital_data inital_data, int number){
 	list* extlist = *headlist;
-	list* newelement = newContainer();
+	list* newelement = new_list(inital_data);
 	int counter = 0;
 	if(is_empty(&extlist) == 0){
 		extlist->data = inital_data;
@@ -122,107 +145,21 @@ setvbuf(stderr, NULL, _IONBF, 0);
 char rep = 'n';
 do
 {
-{
-	//working with a file
 	FILE *input, *output;
 	input = fopen("input.txt", "r");
-	output = fopen("output.txt", "w");
+	//output = fopen("output.txt", "w");
 
 	struct inital_data elem;
 	list *inital_data = new_list(elem);
 
-	//declaring variables
-	//char op, data;
-	//int deg;
-	//float var1, var2, zdeg;
-	//long long int fac;
-	//float *v1, *v2, *result;
-	//int size;
+	int deg, fac;
 
 	while(feof(input) == 0)
 	{
 		fscanf(input, " %c", &elem.op);
 		fscanf(input, " %c", &elem.mode);
 
-		//working with numbers
-		/*if(data == 's')
-		{
-			fscanf(input, "%f", &var1);
-			if (op == '^' || op == '!')
-			{
-				switch(op)
-				{
-				case '^': //exponentiation of a number
-					zdeg = 1;
-					fscanf(input, "%i", &deg);
-					if (deg == 0) fprintf(output,"%f^%i = 1\n", var1, deg);
-					else if (deg > 0)
-						{
-						for(int i = 1; i <= deg; i++)
-							zdeg = zdeg * var1;
-						fprintf(output,"%f^%i = %f\n", var1, deg, zdeg);
-						}
-					break;
-				case '!': //finding the factorial
-					fac = 1;
-					if (var1 < 0) fprintf(output, "error");
-					else if (var1 == 0) fprintf(output, "%f! = 1\n", var1);
-					else
-						{
-						for(int i = 1; i <= var1; i++)
-							fac = fac*i;
-						fprintf(output, "%f! = %I64i\n", var1, fac);
-						}
-					break;
-				default:
-					fprintf(output, "error\n");
-					break;
-				}
-			}
-			else
-				{
-
-				fscanf(input, "%f", &var2);
-				switch(op)
-				{
-				case '+': //addition operation
-					fprintf(output, "%f+%f = %f\n" , var1, var2, var1+var2);
-					break;
-				case '-': //difference
-					fprintf(output, "%f-%f = %f\n" , var1, var2, var1-var2);
-					break;
-				case '*': //multiplication operation
-					fprintf(output, "%f*%f = %f\n" , var1, var2, var1*var2);
-					break;
-				case '/': //division operation
-					fprintf(output, "%f/%f = %f\n" , var1, var2, var1/var2);
-					break;
-				default:
-					fprintf(output, "error\n");
-					break;
-				}
-				}
-		}
-		*/
-		if(elem.mode == 'v') //working with vectors
-		{
-			//setvbuf(stdout, NULL, _IONBF, 0);
-			//setvbuf(stderr, NULL, _IONBF, 0);
-			fscanf(input, "%i", &elem.size);
-			elem.data = malloc(elem.size*sizeof(double));
-			//v1 = malloc(size*sizeof(int)); //the first vector is set
-			//v2 = malloc(size*sizeof(int)); //the second vector is set
-			//result = malloc(size*sizeof(int));
-			//fprintf(output,"("); //entering vectors
-			for(int i=0; i < elem.size*2; i++)
-			{
-				fscanf(input, "%f", &elem.data[i]);
-				//fprintf(output, " %f", v1[i]);
-			}
-			//fprintf(output," ) ");
-			addlast(&inital_data, elem);
-		}
-		else if(elem.mode == 's')
+		if(elem.mode == 's')
 		{
 			if(elem.op == '!')
 			{
@@ -237,61 +174,199 @@ do
 			}
 			addlast(&inital_data, elem);
 		}
+		else if(elem.mode == 'v')
+		{
+			fscanf(input, "%i", &elem.size);
+			elem.data = malloc(elem.size*sizeof(double));
+			for(int i=0; i < elem.size*2; i++)
+			{
+				fscanf(input, "%f", &elem.data[i]);
+			}
+			addlast(&inital_data, elem);
+		}
 	}
 
-			fprintf(output,"%c", op);
-			fprintf(output," (");
-			for(int i=0; i < size; i++)
-			{
-				fscanf(input, "%f", &v2[i]);
-				fprintf(output, " %f", v2[i]);
-			}
-			fprintf(output," ) = ");
-
-			if(op == '+') //addition operation
-			{
-				fprintf(output, "( ");
-				for(int i=0; i < size; i++)
-				{
-					result[i] = v1[i] + v2[i];
-					fprintf(output,"%f ", result[i]);
-				}
-				fprintf(output, ")\n");
-			}
-
-			if(op == '-') //difference
-			{
-				fprintf(output, "( ");
-				for(int i=0; i < size; i++)
-				{
-					result[i] = v1[i] - v2[i];
-					fprintf(output,"%f ", result[i]);
-				}
-				fprintf(output, ")\n");
-			}
-
-			if(op == '*') //multiplication operation
-			{
-				fprintf(output, "( ");
-				for(int i=0; i < size; i++)
-				{
-					result[i] = v1[i] * v2[i];
-					fprintf(output,"%f ", result[i]);
-				}
-				fprintf(output, ")\n");
-			}
-
-			free(v1);
-			free(v2);
-			free(result);
-	}
-	}
 	fclose(input);
-	fclose(output);
-}
 
+	list* link = inital_data;
+	struct inital_data deducing_elem;
+	deducing_elem.data = malloc(inital_data->data.size*sizeof(double));
+	list* output_list = new_list(deducing_elem);
+	while(link->next != NULL)
+	{
+		link = link->next;
+		deducing_elem.data = malloc(inital_data->data.size*sizeof(double));
+		if(link->data.mode == 'v')
+		{
+			switch(link->data.op)
+		{
+				case '+':
+					for(int i=0; i < link->data.size; i++)
+					{
+						deducing_elem.data[i] = link->data.data[i] + link->data.data[link->data.size+i];
+					}
+					break;
+				case '-':
+					for(int i=0; i < link->data.size; i++)
+					{
+						deducing_elem.data[i] = link->data.data[i] - link->data.data[link->data.size+i];
+					}
+					break;
+				case '*':
+					for(int i=0; i < link->data.size; i++)
+					{
+						deducing_elem.data[i] = link->data.data[i] * link->data.data[link->data.size+i];
+					}
+					break;
+				case '/':
+					for(int i=0; i < link->data.size; i++)
+					{
+						deducing_elem.data[i] = link->data.data[i] / link->data.data[link->data.size+i];
+					}
+					break;
+				default:
+					deducing_elem.op = 'E';
+					break;
+		}
+		}
+		else if(link->data.mode == 's')
+		{
+			if(link->data.op == '!' || link->data.op == '^')
+			{
+				switch(link->data.op)
+				{
+				case '!':
+					fac = 1;
+					if(link->data.data[0] == 0)
+					{
+						deducing_elem.data[0] = 1;
+					}
+					if(link->data.data[0] > 0)
+					{
+						for(int i=1; i <= link->data.data[0]; i++)
+						{
+							fac = i * fac;
+						}
+						deducing_elem.data[0] = fac;
+					}
+					else
+					{
+						deducing_elem.op = 'E';
+					}
+					break;
+				case '^':
+					deg = 1;
+					if(link->data.data[0] == 0)
+					{
+						deducing_elem.data[0] = 1;
+					}
+					if(link->data.data[1] > 0)
+					{
+						for(int i=1; i <= link->data.data[1]; i++)
+						{
+							deg = deg * link->data.data[0];
+						}
+						deducing_elem.data[0] = deg;
+					}
+					if(link->data.data[1] < 0)
+					{
+						for(int i=1; i <= link->data.data[1]; i++)
+						{
+							deg = deg / link->data.data[0];
+						}
+						deducing_elem.data[0] = deg;
+					}
+					break;
+				default:
+					deducing_elem.op = 'E';
+					break;
+				}
+			}
+			else
+			{
+				switch(link->data.op)
+				{
+				case '+':
+					deducing_elem.data[0] = link->data.data[0] + link->data.data[1];
+					break;
+				case '-':
+					deducing_elem.data[0] = link->data.data[0] - link->data.data[1];
+					break;
+				case '*':
+					deducing_elem.data[0] = link->data.data[0] * link->data.data[1];
+					break;
+				case '/':
+					deducing_elem.data[0] = link->data.data[0] / link->data.data[1];
+					break;
+				default:
+					deducing_elem.op = 'E';
+					break;
+
+				}
+			}
+		}
+		else
+		{
+			deducing_elem.op = 'E';
+		}
+		addlast(&output_list,deducing_elem);
+	}
+	while(link->next != NULL){
+		link = link->next;
+		output_list = output_list->next;
+		if(output_list->data.op == 'E')
+		{
+			fprintf(output, "error\n");
+	}
+		else if(link->data.mode == 'v')
+		{
+			fprintf(output, "( ");
+			for(int i = 0; i < link->data.size; i++)
+			{
+				fprintf(output, "%f ", link->data.data[i]);
+			}
+			fprintf(output, ")");
+
+			fprintf(output, " %c ", link->data.op);
+			fprintf(output, "( ");
+			for(int i = 0; i < link->data.size; i++)
+			{
+				fprintf(output, "%f ", link->data.data[link->data.size + i]);
+			}
+
+			fprintf(output, ") = ");
+			if(link->data.op == '\'')
+			{
+				fprintf(output,"%f\n", output_list->data.data[0]);
+			}
+			else
+			{
+				fprintf(output, "( ");
+				for(int i = 0; i < link->data.size; i++)
+				{
+					fprintf(output, "%f ", output_list->data.data[i]);
+				}
+				fprintf(output, ")\n");
+			}
+		}
+		else if (link->data.mode == 's')
+		{
+			if(link->data.op == '!')
+			{
+				fprintf(output, "%f! = %f\n", link->data.data[0], output_list->data.data[0]);
+			}
+			else
+			{
+				fprintf(output, "%f %c %f = %f\n", link->data.data[0],link->data.op, link->data.data[1], output_list->data.data[0]);
+			}
+		}
+		}
+	fclose(output);
+	free(inital_data);
+	free(link);
+	free(output_list);
 	}
 	while(rep == 'y');
 	return 0;
-
 }
+
