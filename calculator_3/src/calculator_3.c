@@ -36,17 +36,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//adding lists from a prepared file
+
+//basic data structure
 struct inital_data{
 	char op, mode;
 	int size;
 	float *data;
 };
 
+//creating a new type
 typedef struct main_list{
 	struct inital_data data;
 	struct main_list *next, *previous, *head, *tail;
 }list;
 
+//creating new list
 list* new_list(struct inital_data inital_data){
 	list* new_list = malloc(sizeof(list));
 	new_list->data = inital_data;
@@ -54,6 +59,7 @@ list* new_list(struct inital_data inital_data){
 	return new_list;
 }
 
+//void check
 int is_empty(list **headcontainer){
 	list* extcontainer = *headcontainer;
 	if(extcontainer->head == NULL){
@@ -62,6 +68,7 @@ int is_empty(list **headcontainer){
 	else return 1;
 }
 
+//counter
 int elementcounter(list **headcontainer){
 	list* extcontainer = *headcontainer;
 	int counter = 0;
@@ -77,6 +84,7 @@ int elementcounter(list **headcontainer){
 	}
 }
 
+//adding an element to the beginning
 void addfirst(list **headlist, struct inital_data inital_data){
 	list* extlist = *headlist;
 	list* newelement = new_list(inital_data);
@@ -92,6 +100,7 @@ void addfirst(list **headlist, struct inital_data inital_data){
 	*headlist = newelement;
 }
 
+//adding an element to the end
 void addlast(list **headlist, struct inital_data inital_data){
 	list* extlist = *headlist;
 	list* newelement = new_list(inital_data);
@@ -106,6 +115,7 @@ void addlast(list **headlist, struct inital_data inital_data){
 	*headlist = newelement;
 }
 
+//adding an element
 void addtolist(list **headlist, struct inital_data inital_data, int number){
 	list* extlist = *headlist;
 	list* newelement = new_list(inital_data);
@@ -136,7 +146,7 @@ void addtolist(list **headlist, struct inital_data inital_data, int number){
 	*headlist = extlist;
 
 }
-
+//the main part
 int main(int argc, char *argv[])
 {
 setvbuf(stdout, NULL, _IONBF, 0);
@@ -145,6 +155,7 @@ setvbuf(stderr, NULL, _IONBF, 0);
 char rep = 'n';
 do
 {
+	//working with a file
 	FILE *input, *output;
 	input = fopen("input.txt", "r");
 
@@ -152,8 +163,9 @@ do
 	struct inital_data elem;
 	list *inital_data = new_list(elem);
 
-	int deg, fac;
+	int deg, fac; //auxiliary variables for calculation
 
+	//reading a file
 	while(feof(input) == 0)
 	{
 		fscanf(input, " %c", &elem.op);
@@ -186,6 +198,7 @@ do
 		}
 	}
 
+	//closing a file
 	fclose(input);
 
 	list* link = inital_data;
@@ -197,30 +210,30 @@ do
 	{
 		link = link->next;
 		deducing_elem.data = malloc(inital_data->data.size*sizeof(double));
-		if(link->data.mode == 'v')
+		if(link->data.mode == 'v') //working with vectors
 		{
 			switch(link->data.op)
 		{
 				case '+':
-					for(int i=0; i < link->data.size; i++)
+					for(int i=0; i < link->data.size; i++) //addition
 					{
 						deducing_elem.data[i] = link->data.data[i] + link->data.data[link->data.size+i];
 					}
 					break;
 				case '-':
-					for(int i=0; i < link->data.size; i++)
+					for(int i=0; i < link->data.size; i++) //subtraction
 					{
 						deducing_elem.data[i] = link->data.data[i] - link->data.data[link->data.size+i];
 					}
 					break;
 				case '*':
-					for(int i=0; i < link->data.size; i++)
+					for(int i=0; i < link->data.size; i++) //multiplication
 					{
 						deducing_elem.data[i] = link->data.data[i] * link->data.data[link->data.size+i];
 					}
 					break;
 				case '/':
-					for(int i=0; i < link->data.size; i++)
+					for(int i=0; i < link->data.size; i++) //division
 					{
 						deducing_elem.data[i] = link->data.data[i] / link->data.data[link->data.size+i];
 					}
@@ -230,13 +243,13 @@ do
 					break;
 		}
 		}
-		else if(link->data.mode == 's')
+		else if(link->data.mode == 's') //working with numbers
 		{
 			if(link->data.op == '!' || link->data.op == '^')
 			{
 				switch(link->data.op)
 				{
-				case '!':
+				case '!': //finding the factorial
 					fac = 1;
 					if(link->data.data[0] == 0)
 					{
@@ -255,7 +268,7 @@ do
 						deducing_elem.op = 'E';
 					}
 					break;
-				case '^':
+				case '^': //exponentiation
 					deg = 1;
 					if(link->data.data[0] == 0)
 					{
@@ -287,16 +300,16 @@ do
 			{
 				switch(link->data.op)
 				{
-				case '+':
+				case '+': //addition
 					deducing_elem.data[0] = link->data.data[0] + link->data.data[1];
 					break;
-				case '-':
+				case '-': //subtraction
 					deducing_elem.data[0] = link->data.data[0] - link->data.data[1];
 					break;
-				case '*':
+				case '*': //multiplication
 					deducing_elem.data[0] = link->data.data[0] * link->data.data[1];
 					break;
-				case '/':
+				case '/': //division
 					deducing_elem.data[0] = link->data.data[0] / link->data.data[1];
 					break;
 				default:
@@ -315,6 +328,7 @@ do
 	output = fopen("output.txt", "w");
 	link = inital_data;
 
+	//working with output
 	while(link->next != NULL)
 	{
 		link = link->next;
@@ -340,19 +354,13 @@ do
 			}
 
 			fprintf(output, ") = ");
-			if(link->data.op == '\'')
+			fprintf(output, "( ");
+			for(int i = 0; i < link->data.size; i++)
 			{
-				fprintf(output,"%f\n", output_list->data.data[0]);
+				fprintf(output, "%f ", output_list->data.data[i]);
 			}
-			else
-			{
-				fprintf(output, "( ");
-				for(int i = 0; i < link->data.size; i++)
-				{
-					fprintf(output, "%f ", output_list->data.data[i]);
-				}
-				fprintf(output, ")\n");
-			}
+			fprintf(output, ")\n");
+
 		}
 		else if (link->data.mode == 's')
 		{
@@ -366,6 +374,8 @@ do
 			}
 		}
 	}
+
+	//closing the file and clearing the memory
 	fclose(output);
 	free(inital_data);
 	free(link);
