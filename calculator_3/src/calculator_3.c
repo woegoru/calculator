@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 5.2                                       ║
+ ║   Version     : 5.6                                       ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -147,7 +147,7 @@ do
 {
 	FILE *input, *output;
 	input = fopen("input.txt", "r");
-	//output = fopen("output.txt", "w");
+	output = fopen("output.txt", "w");
 
 	struct inital_data elem;
 	list *inital_data = new_list(elem);
