@@ -147,7 +147,7 @@ do
 {
 	FILE *input, *output;
 	input = fopen("input.txt", "r");
-	output = fopen("output.txt", "w");
+
 
 	struct inital_data elem;
 	list *inital_data = new_list(elem);
@@ -190,6 +190,7 @@ do
 
 	list* link = inital_data;
 	struct inital_data deducing_elem;
+
 	deducing_elem.data = malloc(inital_data->data.size*sizeof(double));
 	list* output_list = new_list(deducing_elem);
 	while(link->next != NULL)
@@ -311,13 +312,17 @@ do
 		}
 		addlast(&output_list,deducing_elem);
 	}
-	while(link->next != NULL){
+	output = fopen("output.txt", "w");
+	link = inital_data;
+
+	while(link->next != NULL)
+	{
 		link = link->next;
 		output_list = output_list->next;
 		if(output_list->data.op == 'E')
 		{
 			fprintf(output, "error\n");
-	}
+		}
 		else if(link->data.mode == 'v')
 		{
 			fprintf(output, "( ");
@@ -360,7 +365,7 @@ do
 				fprintf(output, "%f %c %f = %f\n", link->data.data[0],link->data.op, link->data.data[1], output_list->data.data[0]);
 			}
 		}
-		}
+	}
 	fclose(output);
 	free(inital_data);
 	free(link);
