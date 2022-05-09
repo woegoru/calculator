@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 6.4                                        ║
+ ║   Version     : 6.                                        ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -66,7 +66,7 @@ queue* new_queue()
 
 int is_empty(queue **headqueue)
 {
-	queue* extelem = *headqueue;
+	queue *extelem = *headqueue;
 	if(extelem->head == NULL)
 	{
 		return 0;
@@ -86,7 +86,7 @@ int elemcounter(queue **headqueue)
 	else{
 		while(extelem != NULL)
 		{
-			counter++;
+			counter = counter + 1;
 			extelem = extelem->next;
 		}
 		return counter;
@@ -124,7 +124,7 @@ void addqueue(queue **headcont, struct inital_data inital_data)
 
 struct inital_data find(queue **headcont)
 {
-	queue *extfind = *headcont;
+	queue* extfind = *headcont;
 	struct inital_data find_data;
 	if(elemcounter(&extfind) > 1)
 	{
@@ -141,7 +141,7 @@ struct inital_data find(queue **headcont)
 	extfind->tail = extfind->next->tail;
 	}
 
-	if(elemcounter(&extfind) == 1)
+	else if(elemcounter(&extfind) == 1)
 	{
 		find_data = extfind->inital_data;
 		extfind->next = NULL;
@@ -177,7 +177,6 @@ do
 	{
 		fscanf(input, " %c", &elem.op);
 		fscanf(input, " %c", &elem.mode);
-
 		if(elem.mode == 's')
 		{
 			if(elem.op == '!')
@@ -335,7 +334,7 @@ do
 		{
 			deducting_elem.op = 'E';
 		}
-		addqueue(&deducting_list,deducting_elem);
+		addqueue(&deducting_list, deducting_elem);
 	}
 	output = fopen("output.txt", "w");
 
@@ -356,7 +355,6 @@ do
 				fprintf(output, "%f ", inital_link.data[i]);
 			}
 			fprintf(output, ")");
-
 			fprintf(output, " %c ", inital_link.op);
 			fprintf(output, "( ");
 			for(int i = 0; i < inital_link.size; i++)
@@ -370,7 +368,6 @@ do
 				fprintf(output, "%f ", deducting_link.data[i]);
 			}
 			fprintf(output, ")\n");
-
 		}
 		else if (inital_link.mode == 's')
 		{
