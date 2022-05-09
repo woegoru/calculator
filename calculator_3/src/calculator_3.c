@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 6.1                                        ║
+ ║   Version     : 6.2                                        ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -49,7 +49,7 @@ struct inital_data
 //creating a new type
 typedef struct elem
 {
-	struct inital_data data;
+	struct inital_data inital_data;
 	struct elem *next, *previous, *head, *tail;
 }queue;
 
@@ -93,36 +93,66 @@ int elemcounter(queue **headqueue)
 	}
 }
 
-void addtolist(container **headlist, struct data data, int number){
-	container* extlist = *headlist;
-	container* newelement = newContainer();
-	int counter = 0;
-	if(is_empty(&extlist) == 0){
-		extlist->data = data;
-		extlist->head = extlist;
+void addqueue(queue **headcont, struct inital_data inital_data)
+{
+	queue* extelem = new_queue();
+	queue* addelem = new_queue();
+	extelem = *headcont;
+	if(elemcounter(&extelem) == 0)
+	{
+        addelem->inital_data = inital_data;
+        addelem->head = addelem;
+        addelem->tail = addelem;
+        extelem = addelem;
 	}
-	else if(number == -1){
-		addfirst(&extlist, data);
-	}
-	else if(number == elementcounter(&extlist) - 1){
-		addlast(&extlist, data);
-	}
-	else{
-		while(number != counter){
-			counter++;
-			extlist = extlist->next;
+	else
+	{
+		addelem->inital_data = inital_data;
+		addelem->head = addelem;
+		addelem->next = addelem;
+		addelem->tail = extelem->tail;
+		extelem->previous = addelem;
+		while (extelem != NULL)
+		{
+			extelem->head = addelem;
+			extelem = extelem->next;
 		}
-		newelement->data = data;
-		newelement->previous = extlist;
-		newelement->next = extlist->next;
-		extlist->next->previous = newelement;
-		extlist->next = newelement;
-		newelement->head = extlist->head;
-		extlist = extlist->head;
+	extelem = addelem;
 	}
-	*headlist = extlist;
-
+	*headcont = extelem;
 }
+
+struct inital_data find(queue **headcont)
+{
+	queue *extfind = *headcont;
+	struct inital_data find_data;
+	if(elemcounter(&extfind) > 1)
+	{
+		find_data = extfind->tail->inital_data;
+		extfind = extfind->tail->previous;
+		extfind->tail = extfind;
+		extfind->next = NULL;
+		while(extfind->previous != NULL)
+		{
+			extfind = extfind->previous;
+			extfind->tail = extfind->next->tail;
+		}
+	extfind = extfind->head;
+	extfind->tail = extfind->next->tail;
+	}
+
+	if(elemcounter(&extfind) == 1)
+	{
+		find_data = extfind->inital_data;
+		extfind->next = NULL;
+		extfind->head = NULL;
+		extfind->previous = NULL;
+		extfind->tail = NULL;
+	}
+	return find_data;
+}
+
+
 //the main part
 int main(int argc, char *argv[])
 {
