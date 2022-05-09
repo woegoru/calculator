@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 5.9                                       ║
+ ║   Version     : 6.1                                        ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -36,63 +36,93 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//adding lists from a prepared file
+//adding queue from a prepared file
 
 //basic data structure
-struct inital_data{
+struct inital_data
+{
 	char op, mode;
 	int size;
 	float *data;
 };
 
 //creating a new type
-typedef struct main_list{
+typedef struct elem
+{
 	struct inital_data data;
-	struct main_list *next, *previous, *head, *tail;
-}list;
+	struct elem *next, *previous, *head, *tail;
+}queue;
 
-//creating new list
-list* new_list(struct inital_data inital_data){
-	list* new_list = malloc(sizeof(list));
-	new_list->data = inital_data;
-	new_list->next = NULL;
-	return new_list;
+//creating new queue
+queue* new_queue()
+{
+	queue* new_queue = malloc(sizeof(queue));
+	new_queue->next = NULL;
+	new_queue->previous = NULL;
+	new_queue->head = NULL;
+	new_queue->tail = NULL;
+	return new_queue;
 }
 
-//adding an element to the beginning
-void addfirst(list **headlist, struct inital_data inital_data){
-	list* addfirst = new_list(inital_data);
-	addfirst->next = *headlist;
-	*headlist = addfirst;
-}
-
-//adding an element to the end
-void addlast(list **headlist, struct inital_data inital_data){
-	list* addlast = new_list(inital_data);
-	list* inital_list = *headlist;
-	while(inital_list->next != NULL){
-		inital_list = inital_list->next;
-	}
-	inital_list->next = addlast;
-}
-
-//adding an element
-void addtolist(list **headlist, struct inital_data inital_data, int number){
-	list* addlist = new_list(inital_data);
-	list* inital_list = *headlist;
-	int counter = 0;
-	while(inital_list->next != NULL)
+int is_empty(queue **headqueue)
+{
+	queue* extelem = *headqueue;
+	if(extelem->head == NULL)
 	{
-		if(counter == number)
+		return 0;
+	}
+	else return 1;
+}
+
+int elemcounter(queue **headqueue)
+{
+	queue* extelem = new_queue;
+	extelem = *headqueue;
+	int counter = 0;
+	if(is_empty(&extelem) == 0)
+	{
+		return counter;
+	}
+	else{
+		while(extelem != NULL)
 		{
-			addlist->next = inital_list->next;
-			inital_list->next = addlist;
+			counter++;
+			extelem = extelem->next;
 		}
-		counter = counter + 1;
-		inital_list = inital_list->next;
+		return counter;
 	}
 }
 
+void addtolist(container **headlist, struct data data, int number){
+	container* extlist = *headlist;
+	container* newelement = newContainer();
+	int counter = 0;
+	if(is_empty(&extlist) == 0){
+		extlist->data = data;
+		extlist->head = extlist;
+	}
+	else if(number == -1){
+		addfirst(&extlist, data);
+	}
+	else if(number == elementcounter(&extlist) - 1){
+		addlast(&extlist, data);
+	}
+	else{
+		while(number != counter){
+			counter++;
+			extlist = extlist->next;
+		}
+		newelement->data = data;
+		newelement->previous = extlist;
+		newelement->next = extlist->next;
+		extlist->next->previous = newelement;
+		extlist->next = newelement;
+		newelement->head = extlist->head;
+		extlist = extlist->head;
+	}
+	*headlist = extlist;
+
+}
 //the main part
 int main(int argc, char *argv[])
 {
