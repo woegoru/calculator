@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 6.2                                        ║
+ ║   Version     : 6.4                                        ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -168,7 +168,7 @@ do
 
 
 	struct inital_data elem;
-	list *inital_data = new_list(elem);
+	queue *inital_data = new_queue();
 
 	int deg, fac; //auxiliary variables for calculation
 
@@ -191,7 +191,6 @@ do
 				fscanf(input, "%f", &elem.data[0]);
 				fscanf(input, "%f", &elem.data[1]);
 			}
-			addlast(&inital_data, elem);
 		}
 		else if(elem.mode == 'v')
 		{
@@ -201,8 +200,8 @@ do
 			{
 				fscanf(input, "%f", &elem.data[i]);
 			}
-			addlast(&inital_data, elem);
 		}
+		addqueue(&inital_data, elem);
 	}
 
 	//closing a file
