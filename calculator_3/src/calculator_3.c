@@ -76,7 +76,7 @@ int is_empty(queue **headqueue)
 
 int elemcounter(queue **headqueue)
 {
-	queue* extelem = new_queue;
+	queue* extelem = new_queue();
 	extelem = *headqueue;
 	int counter = 0;
 	if(is_empty(&extelem) == 0)
@@ -207,119 +207,125 @@ do
 	//closing a file
 	fclose(input);
 
-	list* link = inital_data;
-	struct inital_data deducing_elem;
+	struct inital_data inital_link, deducting_link;
+	struct inital_data deducting_elem;
 
-	deducing_elem.data = malloc(inital_data->data.size*sizeof(double));
-	list* output_list = new_list(deducing_elem);
-	while(link->next != NULL)
+	inital_link.data = malloc(inital_data->inital_data.size*sizeof(double));
+	deducting_link.data = malloc(inital_data->inital_data.size*sizeof(double));
+	deducting_elem.data = malloc(inital_data->inital_data.size*sizeof(double));
+
+	queue* deducting_list = new_queue();
+	queue* deducting_cont_op = new_queue();
+
+	while(is_empty(&inital_data) != 0)
 	{
-		link = link->next;
-		deducing_elem.data = malloc(inital_data->data.size*sizeof(double));
-		if(link->data.mode == 'v') //working with vectors
+		inital_link = find(&inital_data);
+		addqueue(&deducting_cont_op, inital_link);
+		deducting_elem.data = malloc(inital_data->inital_data.size*sizeof(double));
+		if(inital_link.mode == 'v') //working with vectors
 		{
-			switch(link->data.op)
+			switch(inital_link.op)
 		{
 				case '+':
-					for(int i=0; i < link->data.size; i++) //addition
+					for(int i=0; i < inital_link.size; i++) //addition
 					{
-						deducing_elem.data[i] = link->data.data[i] + link->data.data[link->data.size+i];
+						deducting_elem.data[i] = inital_link.data[i] + inital_link.data[inital_link.size+i];
 					}
 					break;
 				case '-':
-					for(int i=0; i < link->data.size; i++) //subtraction
+					for(int i=0; i < inital_link.size; i++) //addition
 					{
-						deducing_elem.data[i] = link->data.data[i] - link->data.data[link->data.size+i];
+						deducting_elem.data[i] = inital_link.data[i] - inital_link.data[inital_link.size+i];
 					}
 					break;
 				case '*':
-					for(int i=0; i < link->data.size; i++) //multiplication
+					for(int i=0; i < inital_link.size; i++) //addition
 					{
-						deducing_elem.data[i] = link->data.data[i] * link->data.data[link->data.size+i];
+						deducting_elem.data[i] = inital_link.data[i] * inital_link.data[inital_link.size+i];
 					}
 					break;
 				case '/':
-					for(int i=0; i < link->data.size; i++) //division
+					for(int i=0; i < inital_link.size; i++) //addition
 					{
-						deducing_elem.data[i] = link->data.data[i] / link->data.data[link->data.size+i];
+						deducting_elem.data[i] = inital_link.data[i] / inital_link.data[inital_link.size+i];
 					}
 					break;
 				default:
-					deducing_elem.op = 'E';
+					deducting_elem.op = 'E';
 					break;
 		}
 		}
-		else if(link->data.mode == 's') //working with numbers
+		else if(inital_link.mode == 's') //working with numbers
 		{
-			if(link->data.op == '!' || link->data.op == '^')
+			if(inital_link.op == '!' || inital_link.op == '^')
 			{
-				switch(link->data.op)
+				switch(inital_link.op)
 				{
 				case '!': //finding the factorial
 					fac = 1;
-					if(link->data.data[0] == 0)
+					if(inital_link.data[0] == 0)
 					{
-						deducing_elem.data[0] = 1;
+						deducting_elem.data[0] = 1;
 					}
-					if(link->data.data[0] > 0)
+					if(inital_link.data[0] > 0)
 					{
-						for(int i=1; i <= link->data.data[0]; i++)
+						for(int i=1; i <= inital_link.data[0]; i++)
 						{
 							fac = i * fac;
 						}
-						deducing_elem.data[0] = fac;
+						deducting_elem.data[0] = fac;
 					}
 					else
 					{
-						deducing_elem.op = 'E';
+						deducting_elem.op = 'E';
 					}
 					break;
 				case '^': //exponentiation
 					deg = 1;
-					if(link->data.data[0] == 0)
+					if(inital_link.data[0] == 0)
 					{
-						deducing_elem.data[0] = 1;
+						deducting_elem.data[0] = 1;
 					}
-					if(link->data.data[1] > 0)
+					if(inital_link.data[1] > 0)
 					{
-						for(int i=1; i <= link->data.data[1]; i++)
+						for(int i=1; i <= inital_link.data[1]; i++)
 						{
-							deg = deg * link->data.data[0];
+							deg = deg * inital_link.data[0];
 						}
-						deducing_elem.data[0] = deg;
+						deducting_elem.data[0] = deg;
 					}
-					if(link->data.data[1] < 0)
+					if(inital_link.data[1] < 0)
 					{
-						for(int i=1; i <= link->data.data[1]; i++)
+						for(int i=1; i <= inital_link.data[1]; i++)
 						{
-							deg = deg / link->data.data[0];
+							deg = deg / inital_link.data[0];
 						}
-						deducing_elem.data[0] = deg;
+						deducting_elem.data[0] = deg;
 					}
 					break;
 				default:
-					deducing_elem.op = 'E';
+					deducting_elem.op = 'E';
 					break;
 				}
 			}
 			else
 			{
-				switch(link->data.op)
+				switch(inital_link.op)
 				{
 				case '+': //addition
-					deducing_elem.data[0] = link->data.data[0] + link->data.data[1];
+					deducting_elem.data[0] = inital_link.data[0] + inital_link.data[1];
 					break;
 				case '-': //subtraction
-					deducing_elem.data[0] = link->data.data[0] - link->data.data[1];
+					deducting_elem.data[0] = inital_link.data[0] - inital_link.data[1];
 					break;
 				case '*': //multiplication
-					deducing_elem.data[0] = link->data.data[0] * link->data.data[1];
+					deducting_elem.data[0] = inital_link.data[0] * inital_link.data[1];
 					break;
 				case '/': //division
-					deducing_elem.data[0] = link->data.data[0] / link->data.data[1];
+					deducting_elem.data[0] = inital_link.data[0] / inital_link.data[1];
 					break;
 				default:
-					deducing_elem.op = 'E';
+					deducting_elem.op = 'E';
 					break;
 
 				}
@@ -327,56 +333,54 @@ do
 		}
 		else
 		{
-			deducing_elem.op = 'E';
+			deducting_elem.op = 'E';
 		}
-		addlast(&output_list,deducing_elem);
+		addqueue(&deducting_list,deducting_elem);
 	}
 	output = fopen("output.txt", "w");
-	link = inital_data;
 
 	//working with output
-	while(link->next != NULL)
+	while(is_empty(&deducting_list) != 0)
 	{
-		link = link->next;
-		output_list = output_list->next;
-		if(output_list->data.op == 'E')
+		inital_link = find(&deducting_cont_op);
+		deducting_link = find(&deducting_list);
+		if(deducting_link.op == 'E')
 		{
 			fprintf(output, "error\n");
 		}
-		else if(link->data.mode == 'v')
+		else if(inital_link.mode == 'v')
 		{
 			fprintf(output, "( ");
-			for(int i = 0; i < link->data.size; i++)
+			for(int i = 0; i < inital_link.size; i++)
 			{
-				fprintf(output, "%f ", link->data.data[i]);
+				fprintf(output, "%f ", inital_link.data[i]);
 			}
 			fprintf(output, ")");
 
-			fprintf(output, " %c ", link->data.op);
+			fprintf(output, " %c ", inital_link.op);
 			fprintf(output, "( ");
-			for(int i = 0; i < link->data.size; i++)
+			for(int i = 0; i < inital_link.size; i++)
 			{
-				fprintf(output, "%f ", link->data.data[link->data.size + i]);
+				fprintf(output, "%f ", inital_link.data[inital_link.size + i]);
 			}
-
 			fprintf(output, ") = ");
 			fprintf(output, "( ");
-			for(int i = 0; i < link->data.size; i++)
+			for(int i = 0; i < inital_link.size; i++)
 			{
-				fprintf(output, "%f ", output_list->data.data[i]);
+				fprintf(output, "%f ", deducting_link.data[i]);
 			}
 			fprintf(output, ")\n");
 
 		}
-		else if (link->data.mode == 's')
+		else if (inital_link.mode == 's')
 		{
-			if(link->data.op == '!')
+			if(inital_link.op == '!')
 			{
-				fprintf(output, "%f! = %f\n", link->data.data[0], output_list->data.data[0]);
+				fprintf(output, "%f! = %f\n", inital_link.data[0], deducting_link.data[0]);
 			}
 			else
 			{
-				fprintf(output, "%f %c %f = %f\n", link->data.data[0],link->data.op, link->data.data[1], output_list->data.data[0]);
+				fprintf(output, "%f %c %f = %f\n", inital_link.data[0],inital_link.op, inital_link.data[1], deducting_link.data[0]);
 			}
 		}
 	}
@@ -384,8 +388,7 @@ do
 	//closing the file and clearing the memory
 	fclose(output);
 	free(inital_data);
-	free(link);
-	free(output_list);
+	free(deducting_list);
 	}
 	while(rep == 'y');
 	return 0;
