@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 6.                                        ║
+ ║   Version     : 6.8                                       ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -63,7 +63,6 @@ queue* new_queue()
 	new_queue->tail = NULL;
 	return new_queue;
 }
-
 int is_empty(queue **headqueue)
 {
 	queue *extelem = *headqueue;
