@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 6.8                                       ║
+ ║   Version     : 6.9                                       ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -116,7 +116,7 @@ void addqueue(queue **headcont, struct inital_data inital_data)
 			extelem->head = addelem;
 			extelem = extelem->next;
 		}
-	extelem = addelem;
+		extelem = addelem;
 	}
 	*headcont = extelem;
 }
@@ -385,6 +385,7 @@ do
 	fclose(output);
 	free(inital_data);
 	free(deducting_list);
+
 	}
 	while(rep == 'y');
 	return 0;
