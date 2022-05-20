@@ -33,361 +33,338 @@
  */
 
 
+
 #include <stdio.h>
 #include <stdlib.h>
 
-//adding queue from a prepared file
+//definition of functions for working with queue
 
-//basic data structure
-struct inital_data
-{
-	char op, mode;
-	int size;
-	float *data;
+//definition new structure data
+struct inital_data{
+    char op;
+    char mode;
+    int size;
+    float *inital_data;
 };
 
-//creating a new type
-typedef struct elem
-{
-	struct inital_data inital_data;
-	struct elem *next, *previous, *head, *tail;
-}queue;
 
-//creating new queue
-queue* new_queue()
-{
-	queue* new_queue = malloc(sizeof(queue));
-	new_queue->next = NULL;
-	new_queue->previous = NULL;
-	new_queue->head = NULL;
-	new_queue->tail = NULL;
-	return new_queue;
-}
-int is_empty(queue **headqueue)
-{
-	queue *extelem = *headqueue;
-	if(extelem->head == NULL)
-	{
-		return 0;
-	}
-	else return 1;
+typedef struct elem{
+    struct inital_data inital_data;
+    struct elem *next, *previous, *head, *tail;
+}qeue;
+
+
+qeue *newqeue(){
+	qeue *newqeue = malloc(sizeof(qeue));
+    newqeue->next = NULL;
+    newqeue->head = NULL;
+    newqeue->tail = NULL;
+    newqeue->previous = NULL;
+    return newqeue;
 }
 
-int elemcounter(queue **headqueue)
-{
-	queue* extelem = new_queue();
-	extelem = *headqueue;
-	int counter = 0;
-	if(is_empty(&extelem) == 0)
-	{
-		return counter;
-	}
-	else{
-		while(extelem != NULL)
-		{
-			counter = counter + 1;
-			extelem = extelem->next;
-		}
-		return counter;
-	}
+
+int is_empty(qeue **headqeue){
+	qeue *extelem = *headqeue;
+    if(extelem->head == NULL){
+        return 0;
+    }
+    else{
+        return 1;
+    }
 }
 
-void addqueue(queue **headcont, struct inital_data inital_data)
-{
-	queue* extelem = new_queue();
-	queue* addelem = new_queue();
-	extelem = *headcont;
-	if(elemcounter(&extelem) == 0)
-	{
+
+int elemcounter(qeue **headqeue){
+	qeue *extelem = newqeue();
+    extelem = *headqeue;
+    int counter = 0;
+    if(is_empty(&extelem) == 0){
+        return 0;
+    }
+    else{
+        while (extelem != NULL){
+            counter++;
+            extelem = extelem->next;
+        }
+        return counter;
+    }
+}
+
+
+void addtoqueue(qeue **headqueue, struct inital_data inital_data){
+	qeue *extelem = newqeue();
+	qeue *addelem = newqeue();
+    extelem = *headqueue;
+    if(elemcounter(&extelem) == 0){
         addelem->inital_data = inital_data;
         addelem->head = addelem;
         addelem->tail = addelem;
         extelem = addelem;
-	}
-	else
-	{
-		addelem->inital_data = inital_data;
-		addelem->head = addelem;
-		addelem->next = addelem;
-		addelem->tail = extelem->tail;
-		extelem->previous = addelem;
-		while (extelem != NULL)
-		{
-			extelem->head = addelem;
-			extelem = extelem->next;
-		}
-		extelem = addelem;
-	}
-	*headcont = extelem;
-}
-
-struct inital_data find(queue **headcont)
-{
-	queue* extfind = *headcont;
-	struct inital_data find_data;
-	if(elemcounter(&extfind) > 1)
-	{
-		find_data = extfind->tail->inital_data;
-		extfind = extfind->tail->previous;
-		extfind->tail = extfind;
-		extfind->next = NULL;
-		while(extfind->previous != NULL)
-		{
-			extfind = extfind->previous;
-			extfind->tail = extfind->next->tail;
-		}
-	extfind = extfind->head;
-	extfind->tail = extfind->next->tail;
-	}
-
-	else if(elemcounter(&extfind) == 1)
-	{
-		find_data = extfind->inital_data;
-		extfind->next = NULL;
-		extfind->head = NULL;
-		extfind->previous = NULL;
-		extfind->tail = NULL;
-	}
-	return find_data;
+    }
+    else{
+        addelem->inital_data = inital_data;
+        addelem->head = addelem;
+        addelem->next = extelem;
+        addelem->tail = extelem->tail;
+        extelem->previous = addelem;
+        while (extelem != NULL){
+            extelem->head = addelem;
+            extelem = extelem->next;
+        }
+        extelem = addelem;
+    }
+    *headqueue = extelem;
 }
 
 
-//the main part
-int main(int argc, char *argv[])
-{
-setvbuf(stdout, NULL, _IONBF, 0);
-setvbuf(stderr, NULL, _IONBF, 0);
+struct inital_data find(qeue **headqueue){
+	qeue *extqueue = *headqueue;
+    struct inital_data finddata;
+    if (elemcounter(&extqueue) == 1){
+        finddata = extqueue->inital_data;
+        extqueue->next = NULL;
+        extqueue->head = NULL;
+        extqueue->tail = NULL;
+        extqueue->previous = NULL;
+    } else if (elemcounter(&extqueue) > 1){
+        finddata = extqueue->tail->inital_data;
+        extqueue = extqueue->tail->previous;
+        extqueue->tail = extqueue;
+        extqueue->next = NULL;
+        while (extqueue->previous != NULL){
+            extqueue = extqueue->previous;
+            extqueue->tail = extqueue->next->tail;
+        }
+        extqueue = extqueue->head;
+        *headqueue = extqueue;
+    }
+    return finddata;
+}
 
-char rep = 'n';
-do
-{
-	//working with a file
-	FILE *input, *output;
-	input = fopen("input.txt", "r");
 
 
-	struct inital_data elem;
-	queue *inital_data = new_queue();
+int main(int argc, char *argv[]){
+    setvbuf(stdout, NULL, _IONBF, 0);
+    setvbuf(stderr, NULL, _IONBF, 0);
+    char repeat = 'n';
+    int deg;
+    int factorial;
 
-	int deg, fac; //auxiliary variables for calculation
+    do{
 
-	//reading a file
-	while(feof(input) == 0)
-	{
-		fscanf(input, " %c", &elem.op);
-		fscanf(input, " %c", &elem.mode);
-		if(elem.mode == 's')
-		{
-			if(elem.op == '!')
-			{
-				elem.data = malloc(sizeof(double));
-				fscanf(input, "%f", &elem.data[0]);
-			}
-			else
-			{
-				elem.data = malloc(sizeof(double)*2);
-				fscanf(input, "%f", &elem.data[0]);
-				fscanf(input, "%f", &elem.data[1]);
-			}
-		}
-		else if(elem.mode == 'v')
-		{
-			fscanf(input, "%i", &elem.size);
-			elem.data = malloc(elem.size*sizeof(double));
-			for(int i=0; i < elem.size*2; i++)
-			{
-				fscanf(input, "%f", &elem.data[i]);
-			}
-		}
-		addqueue(&inital_data, elem);
-	}
+    	FILE *input, *output;
+    	input = fopen("input.txt", "r");
+        struct inital_data elem;
 
-	//closing a file
-	fclose(input);
+        qeue *inital_data = newqeue();
 
-	struct inital_data inital_link, deducting_link;
-	struct inital_data deducting_elem;
+        while(feof(input) == 0){
+            fscanf(input, " %c", &elem.op);
+            fscanf(input, " %c", &elem.mode);
+            if (elem.mode == 'v'){
+                fscanf(input, "%i", &elem.size);
+                elem.inital_data = malloc(elem.size*sizeof(double));
+                for(int i=0; i < elem.size*2; i++)
+                {
+                    fscanf(input, "%f", &elem.inital_data[i]);
+                }
+            } else if(elem.mode == 's') {
+                if(elem.op == '!'){
+                    elem.inital_data = malloc(sizeof(double));
+                    fscanf(input, "%f", &elem.inital_data[0]);
+                }
+                else {
+                    elem.inital_data = malloc(2 * sizeof(double));
+                    fscanf(input, "%f", &elem.inital_data[0]);
+                    fscanf(input, "%f", &elem.inital_data[1]);
+                }
+            }
+            //adding new element to end of queue
+            addtoqueue(&inital_data, elem);
+        }
+        //closing file
+        fclose(input);
+        struct inital_data input_link, deducting_link;
+        struct inital_data deducting_elem;
+        input_link.inital_data = malloc(inital_data->inital_data.size*sizeof(double));
+        deducting_link.inital_data = malloc(inital_data->inital_data.size*sizeof(double));
+        deducting_elem.inital_data = malloc(inital_data->inital_data.size*sizeof(double));
+        qeue *deducting_list = newqeue();
+        qeue *deducting_queue_op = newqeue();
+        while(is_empty(&inital_data) != 0) {
+        	//getting an element from the queue
+            input_link = find(&inital_data);
+            //adding new element to end of queue
+            addtoqueue(&deducting_queue_op,input_link);
+            //allocation memory
+            deducting_elem.inital_data = malloc(inital_data->inital_data.size*sizeof(double));
+            //working with vectors
+            if(input_link.mode == 'v')
+            {
+                switch (input_link.op)
+                {
 
-	inital_link.data = malloc(inital_data->inital_data.size*sizeof(double));
-	deducting_link.data = malloc(inital_data->inital_data.size*sizeof(double));
-	deducting_elem.data = malloc(inital_data->inital_data.size*sizeof(double));
+                    case '+': //addition
+                        for(int i=0; i < input_link.size; i++)
+                        {
+                        	deducting_elem.inital_data[i] = input_link.inital_data[i] + input_link.inital_data[input_link.size+i];
+                        }
+                        break;
 
-	queue* deducting_list = new_queue();
-	queue* deducting_cont_op = new_queue();
+                    case '-'://difference
+                        for(int i=0; i < input_link.size; i++)
+                        {
+                        	deducting_elem.inital_data[i] = input_link.inital_data[i] - input_link.inital_data[input_link.size+i];
+                        }
+                        break;
 
-	while(is_empty(&inital_data) != 0)
-	{
-		inital_link = find(&inital_data);
-		addqueue(&deducting_cont_op, inital_link);
-		deducting_elem.data = malloc(inital_data->inital_data.size*sizeof(double));
-		if(inital_link.mode == 'v') //working with vectors
-		{
-			switch(inital_link.op)
-		{
-				case '+':
-					for(int i=0; i < inital_link.size; i++) //addition
-					{
-						deducting_elem.data[i] = inital_link.data[i] + inital_link.data[inital_link.size+i];
-					}
-					break;
-				case '-':
-					for(int i=0; i < inital_link.size; i++) //addition
-					{
-						deducting_elem.data[i] = inital_link.data[i] - inital_link.data[inital_link.size+i];
-					}
-					break;
-				case '*':
-					for(int i=0; i < inital_link.size; i++) //addition
-					{
-						deducting_elem.data[i] = inital_link.data[i] * inital_link.data[inital_link.size+i];
-					}
-					break;
-				case '/':
-					for(int i=0; i < inital_link.size; i++) //addition
-					{
-						deducting_elem.data[i] = inital_link.data[i] / inital_link.data[inital_link.size+i];
-					}
-					break;
-				default:
-					deducting_elem.op = 'E';
-					break;
-		}
-		}
-		else if(inital_link.mode == 's') //working with numbers
-		{
-			if(inital_link.op == '!' || inital_link.op == '^')
-			{
-				switch(inital_link.op)
-				{
-				case '!': //finding the factorial
-					fac = 1;
-					if(inital_link.data[0] == 0)
-					{
-						deducting_elem.data[0] = 1;
-					}
-					if(inital_link.data[0] > 0)
-					{
-						for(int i=1; i <= inital_link.data[0]; i++)
-						{
-							fac = i * fac;
-						}
-						deducting_elem.data[0] = fac;
-					}
-					else
-					{
-						deducting_elem.op = 'E';
-					}
-					break;
-				case '^': //exponentiation
-					deg = 1;
-					if(inital_link.data[0] == 0)
-					{
-						deducting_elem.data[0] = 1;
-					}
-					if(inital_link.data[1] > 0)
-					{
-						for(int i=1; i <= inital_link.data[1]; i++)
-						{
-							deg = deg * inital_link.data[0];
-						}
-						deducting_elem.data[0] = deg;
-					}
-					if(inital_link.data[1] < 0)
-					{
-						for(int i=1; i <= inital_link.data[1]; i++)
-						{
-							deg = deg / inital_link.data[0];
-						}
-						deducting_elem.data[0] = deg;
-					}
-					break;
-				default:
-					deducting_elem.op = 'E';
-					break;
-				}
-			}
-			else
-			{
-				switch(inital_link.op)
-				{
-				case '+': //addition
-					deducting_elem.data[0] = inital_link.data[0] + inital_link.data[1];
-					break;
-				case '-': //subtraction
-					deducting_elem.data[0] = inital_link.data[0] - inital_link.data[1];
-					break;
-				case '*': //multiplication
-					deducting_elem.data[0] = inital_link.data[0] * inital_link.data[1];
-					break;
-				case '/': //division
-					deducting_elem.data[0] = inital_link.data[0] / inital_link.data[1];
-					break;
-				default:
-					deducting_elem.op = 'E';
-					break;
+                    case '*'://multiplication
+                        for(int i=0; i < input_link.size; i++)
+                        {
+                        	deducting_elem.inital_data[i] = input_link.inital_data[i] * input_link.inital_data[input_link.size+i];
+                        }
+                        break;
+                    default:
+                    	deducting_elem.op = 'e';
+                        break;
+                }
+            }
+            //working with numbers
+            else if(input_link.mode == 's')
+            {
+                if (input_link.op == '!' || input_link.op == '^')
+                {
+                    switch (input_link.op)
+                    {
 
-				}
-			}
-		}
-		else
-		{
-			deducting_elem.op = 'E';
-		}
-		addqueue(&deducting_list, deducting_elem);
-	}
-	output = fopen("output.txt", "w");
+                        case '!': //factorial
+                            factorial = 1;
+                            if(input_link.inital_data[0] == 0)
+                            {
+                            	deducting_elem.inital_data[0] = 1;
+                            }
+                            else
+                            {
+                                for(int i=1; i <= input_link.inital_data[0]; i++)
+                                {
+                                    factorial=factorial*i;
+                                }
+                                //output
+                                deducting_elem.inital_data[0] = factorial;
+                            }
+                            break;
+                        case '^': //exponentiation
+                            deg = 1;
+                            if(input_link.inital_data[1] == 0)
+                            {
+                            	deducting_elem.inital_data[0] = 1;
+                            }
+                            else if (input_link.inital_data[1] < 0)
+                            {
+                                for(int i=1;i <= input_link.inital_data[1];i++)
+                                {
+                                    deg = deg / input_link.inital_data[0];
+                                }
+                                deducting_elem.inital_data[0] = deg;
+                            }
+                            else
+                            {
+                                for(int i=1;i<=input_link.inital_data[1];i++)
+                                {
+                                    deg = deg * input_link.inital_data[0];
+                                }
+                                deducting_elem.inital_data[0] = deg;
+                            }
+                            break;
+                        default:
 
-	//working with output
-	while(is_empty(&deducting_list) != 0)
-	{
-		inital_link = find(&deducting_cont_op);
-		deducting_link = find(&deducting_list);
-		if(deducting_link.op == 'E')
-		{
-			fprintf(output, "error\n");
-		}
-		else if(inital_link.mode == 'v')
-		{
-			fprintf(output, "( ");
-			for(int i = 0; i < inital_link.size; i++)
-			{
-				fprintf(output, "%f ", inital_link.data[i]);
-			}
-			fprintf(output, ")");
-			fprintf(output, " %c ", inital_link.op);
-			fprintf(output, "( ");
-			for(int i = 0; i < inital_link.size; i++)
-			{
-				fprintf(output, "%f ", inital_link.data[inital_link.size + i]);
-			}
-			fprintf(output, ") = ");
-			fprintf(output, "( ");
-			for(int i = 0; i < inital_link.size; i++)
-			{
-				fprintf(output, "%f ", deducting_link.data[i]);
-			}
-			fprintf(output, ")\n");
-		}
-		else if (inital_link.mode == 's')
-		{
-			if(inital_link.op == '!')
-			{
-				fprintf(output, "%f! = %f\n", inital_link.data[0], deducting_link.data[0]);
-			}
-			else
-			{
-				fprintf(output, "%f %c %f = %f\n", inital_link.data[0],inital_link.op, inital_link.data[1], deducting_link.data[0]);
-			}
-		}
-	}
+                        	deducting_elem.op = 'e';
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (input_link.op)
+                    {
+                        //addition
+                        case '+':
+                            deducting_elem.inital_data[0] = input_link.inital_data[0]+input_link.inital_data[1];
+                            break;
+                            //difference
+                        case '-':
+                        	deducting_elem.inital_data[0] = input_link.inital_data[0]-input_link.inital_data[1];
+                            break;
+                            //multiplication
+                        case '*':
+                        	deducting_elem.inital_data[0] = input_link.inital_data[0]*input_link.inital_data[1];
+                            break;
+                            //division
+                        case '/':
+                        	deducting_elem.inital_data[0] = input_link.inital_data[0]/input_link.inital_data[1];
+                            break;
+                        default:
+                        	deducting_elem.op = 'e';
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                deducting_elem.op = 'e';
+            }
+            //adding new element to end of queue
+            addtoqueue(&deducting_list,deducting_elem);
+        }
 
-	//closing the file and clearing the memory
-	fclose(output);
-	free(inital_data);
-	free(deducting_list);
-
-	}
-	while(rep == 'y');
-	return 0;
+    	output = fopen("output.txt", "w");
+        while(is_empty(&deducting_list) != 0){
+        	//getting an element from the queue
+            input_link = find(&deducting_queue_op);
+            deducting_link = find(&deducting_list);
+            if(deducting_link.op == 'e'){
+                fprintf(output, "error\n");
+            }
+            //output working with vectors
+            else if(input_link.mode == 'v'){
+                fprintf(output, "( ");
+                for(int i = 0; i < input_link.size; i++){
+                    fprintf(output, "%f ", input_link.inital_data[i]);
+                }
+                fprintf(output, ")");
+                fprintf(output, " %c ", input_link.op);
+                fprintf(output, "( ");
+                for(int i = 0; i < input_link.size; i++){
+                    fprintf(output, "%f ", input_link.inital_data[input_link.size + i]);
+                }
+                fprintf(output, ") = ");
+                if(input_link.op == '\''){
+                    fprintf(output,"%f\n", deducting_link.inital_data[0]);
+                } else {
+                    fprintf(output, "( ");
+                    for(int i = 0; i < input_link.size; i++){
+                        fprintf(output, "%f ", deducting_link.inital_data[i]);
+                    }
+                    fprintf(output, ")\n");
+                }
+            //output working with numbers
+            } else if (input_link.mode == 's'){
+                if(input_link.op == '!'){
+                    fprintf(output, "%f! = %f\n", input_link.inital_data[0], deducting_link.inital_data[0]);
+                } else {
+                    fprintf(output, "%f %c %f = %f\n", input_link.inital_data[0],input_link.op, input_link.inital_data[1], deducting_link.inital_data[0]);
+                }
+            }
+        }
+        //closing file and clearing memory
+        fclose(output);
+        free(inital_data);
+        free(deducting_list);
+        //repeat the program
+        printf("start over?\n'y' - yes\'n' - no\n");
+        scanf(" %c", &repeat);
+    }
+    while(repeat == 'y');
+    return 0;
 }
 
