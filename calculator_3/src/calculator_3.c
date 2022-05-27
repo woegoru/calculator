@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 6.9                                       ║
+ ║   Version     : 8.1                                       ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -150,11 +150,17 @@ int main(int argc, char *argv[]){
     char repeat = 'n';
     int deg;
     int factorial;
+    char *path;
 
     do{
 
     	FILE *input, *output;
-    	input = fopen("input.txt", "r");
+    	path = calloc(100, sizeof(char));
+    	printf("enter the path to the file with input data:\n");
+    	scanf(" %100s", path);
+    	input = fopen(path, "r");
+    	free(path);
+
         struct inital_data elem;
 
         qeue *inital_data = newqeue();
@@ -316,8 +322,11 @@ int main(int argc, char *argv[]){
             //adding new element to end of queue
             addtoqueue(&deducting_list,deducting_elem);
         }
-
-    	output = fopen("output.txt", "w");
+        path = calloc(100, sizeof(char));
+        printf("enter the path to the file where the output will be placed:\n");
+        scanf(" %100s", path);
+        output = fopen(path, "w");
+        free(path);
         while(is_empty(&deducting_list) != 0){
         	//getting an element from the queue
             input_link = find(&deducting_queue_op);
@@ -367,4 +376,4 @@ int main(int argc, char *argv[]){
     while(repeat == 'y');
     return 0;
 }
-//jkgch
+
