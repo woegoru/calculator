@@ -2,7 +2,7 @@
  ╔═════════════════════════[ХХХ]═════════════════════════════╗
  ║   Name        : calculator_3.c                            ║
  ║   Author      : Darya K  (https://github.com/Grief3749)   ║
- ║   Version     : 9.1                                       ║
+ ║   Version     : 11.4                                       ║
  ║   Copyright   : all rights reserved                       ║
  ║   Description : calculator of numbers and vectors in C    ║
  ╚═══════════════════════════════════════════════════════════╝
@@ -35,282 +35,186 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//definition of functions for working with queue
 
-//definition new structure data
-struct inital_data
+typedef struct elem_data
 {
-    char op;
-    char mode;
-    int size;
-    float *inital_data;
-};
+	float data;
+	struct elem_data *head, *previos;
+}stack;
 
-
-//definition of new type
-typedef struct type_list
+//checking for emptiness
+int is_empty(stack **head_stack)
 {
-    struct inital_data inital_data;
-    struct type_list *next;
-}list;
-
-//creating new list
-list *newlist(struct inital_data inital_data){
-    list *newlist = malloc(sizeof(list));
-    newlist->inital_data = inital_data;
-    newlist->next = NULL;
-    return newlist;
+    stack *pointer = *head_stack;
+	if(pointer->head == NULL)
+	{
+		return 1;
+	}
+		return 0;
 }
 
-//adding to beginning of list
-void addfirst(list **headlist, struct inital_data inital_data){
-    list *addfirst = newlist(inital_data);
-    addfirst->next = *headlist;
-    *headlist = addfirst;
+//counter
+int elemcount(stack **head_stack)
+{
+    stack *pointer = *head_stack;
+	int count = 0;
+	if(is_empty(&pointer) != 1)
+	{
+		count++;
+		while(pointer->previos != NULL)
+		{
+			count++;
+            pointer = pointer->previos;
+		}
+	}
+	return count;
 }
 
-//adding to end of list
-void addlast(list **headlist, struct inital_data inital_data){
-    list *addlast = newlist(inital_data);
-    list *currentlist = *headlist;
-    while(currentlist->next != NULL){
-        currentlist = currentlist->next;
-    }
-    currentlist->next = addlast;
+//new stack
+stack* new_stack()
+{
+	stack* new_stack = malloc(sizeof(stack));
+	new_stack->head = NULL;
+	new_stack->previos = NULL;
+	return new_stack;
 }
 
-//adding after a definite element
-void add(list **headlist, struct inital_data inital_data, int serialnum){
-    list *addlist = newlist(inital_data);
-    list *currentlist = *headlist;
-    int current_serialnum = 0;
-    while(currentlist->next != NULL){
-        if(current_serialnum == serialnum){
-            addlist->next = currentlist->next;
-            currentlist->next = addlist;
+//adding element to stack
+void add(stack **head_stack, float data)
+{
+    stack *pointer = *head_stack;
+	if(is_empty(&pointer) == 1)
+	{
+        pointer->data = data;
+        pointer->head = pointer;
+	}
+	else
+	{
+		stack* new_elem = new_stack();
+		new_elem->data = data;
+		new_elem->previos = pointer;
+		new_elem->head = new_elem;
+        pointer->head = new_elem;
+		while(pointer->previos != NULL)
+		{
+            pointer = pointer->previos;
+            pointer->head = new_elem;
+		}
+        *head_stack = pointer->head;
+	}
+}
+
+//take an element from the stack
+float findstack(stack **head_stack)
+{
+    stack *pointer = *head_stack;
+    float find_data = pointer->data;
+    if(elemcount(&pointer) > 1)
+    {
+        pointer = pointer->previos;
+        *head_stack = pointer;
+        free(pointer->head);
+        pointer->head = pointer;
+        while (pointer->previos != NULL)
+        {
+            pointer->previos->head = pointer->head;
+            pointer = pointer->previos;
         }
-        current_serialnum++;
-        currentlist = currentlist->next;
     }
+    else
+    {
+        pointer->head = NULL;
+    }
+    return find_data;
 }
 
 //main function
-int main(int argc, char *argv[]){
-    setvbuf(stdout, NULL, _IONBF, 0);
-    setvbuf(stderr, NULL, _IONBF, 0);
-    char repeat = 'n';
-    int deg;
-    int factorial;
-    char *path;
+int main(int argc, char* argv[])
+{
+	 setvbuf(stdout, NULL, _IONBF, 0);
+	 setvbuf(stderr, NULL, _IONBF, 0);
+	 char *path;
+	 float data;
+	 char op, extra;
+	 float num1, num2;
+	 int counter = 0;
 
-    do{
+	FILE *input, *output;
+	path = calloc(100, sizeof(char));
+	printf("enter the path to the file with input data:\n");
+	scanf(" %100s", path);
+	input = fopen(path, "r");
+	free(path);
+	//entering path to output file
 
-		FILE *input, *output;
-		path = calloc(100, sizeof(char));
-		printf("enter the path to the file with input data:\n");
-		scanf(" %100s", path);
-		input = fopen(path, "r");
-		free(path);
-		struct inital_data elem;
-		list *inital_data = newlist(elem);
-		while(feof(input) == 0){
-			fscanf(input, " %c", &elem.op);
-			fscanf(input, " %c", &elem.mode);
-			if (elem.mode == 'v'){
-				fscanf(input, "%i", &elem.size);
-				elem.inital_data = malloc(elem.size*sizeof(double));
-				for(int i=0; i < elem.size*2; i++)
-				{
-					fscanf(input, "%f", &elem.inital_data[i]);
-				}
-				addlast(&inital_data, elem);
-			} else if(elem.mode == 's') {
-				if(elem.op == '!'){
-					elem.inital_data = malloc(sizeof(double));
-					fscanf(input, "%f", &elem.inital_data[0]);
-				}
-				else {
-					elem.inital_data = malloc(2 * sizeof(double));
-					fscanf(input, "%f", &elem.inital_data[0]);
-					fscanf(input, "%f", &elem.inital_data[1]);
-				}
-				//adding new element to end of list
-				addlast(&inital_data, elem);
-			}
-		}
-		//closing file
-		fclose(input);
-		list *pointer = inital_data;
-		struct inital_data deducting_elem;
-		deducting_elem.inital_data = malloc(inital_data->inital_data.size*sizeof(double));
-		list *deducting_list = newlist(deducting_elem);
-		while(pointer->next != NULL) {
-			pointer = pointer->next;
-			deducting_elem.inital_data = malloc(inital_data->inital_data.size*sizeof(double));
-			//working with vectors
-			if(pointer->inital_data.mode == 'v')
-			{
-				switch (pointer->inital_data.op)
-				{
-					case '+':
-						for(int i=0; i < pointer->inital_data.size; i++)
-						{
-							deducting_elem.inital_data[i] = pointer->inital_data.inital_data[i] + pointer->inital_data.inital_data[pointer->inital_data.size+i];
-						}
-						break;
-					case '-':
-						for(int i=0; i < pointer->inital_data.size; i++)
-						{
-							deducting_elem.inital_data[i] = pointer->inital_data.inital_data[i] - pointer->inital_data.inital_data[pointer->inital_data.size+i];
-						}
-						break;
-					case '*':
-						for(int i=0; i < pointer->inital_data.size; i++)
-						{
-							deducting_elem.inital_data[i] = pointer->inital_data.inital_data[i] * pointer->inital_data.inital_data[pointer->inital_data.size+i];
-						}
-						break;
-					default:
-						deducting_elem.op = 'e';
-						break;
-				}
-			}
-			//working with numbers
-			else if(pointer->inital_data.mode == 's')
-			{
-				if (pointer->inital_data.op == '!' || pointer->inital_data.op == '^')
-				{
-					switch (pointer->inital_data.op)
-					{
-						case '!'://factorial
-							factorial = 1;
-							if(pointer->inital_data.inital_data[0] == 0)
-							{
-								deducting_elem.inital_data[0] = 1;
-							}
-							else
-							{
-								for(int i=1; i <= pointer->inital_data.inital_data[0]; i++)
-								{
-									factorial=factorial*i;
-								}
-								deducting_elem.inital_data[0] = factorial;
-							}
-							break;
+	path = calloc(100, sizeof(char));
+	printf("enter the path to the file where the output will be placed:\n");
+	scanf(" %100s", path);
+	output = fopen(path, "w");
+	free(path);
 
-						case '^'://exponentiation
-							deg = 1;
-							if(pointer->inital_data.inital_data[1] == 0)
-							{
-								deducting_elem.inital_data[0] = 1;
-							}
-							else if (pointer->inital_data.inital_data[1] < 0)
-							{
-								for(int i=1;i <= pointer->inital_data.inital_data[1];i++)
-								{
-									deg = deg / pointer->inital_data.inital_data[0];
-								}
-								deducting_elem.inital_data[0] = deg;
-							}
-							else
-							{
-								for(int i=1;i<=pointer->inital_data.inital_data[1];i++)
-								{
-									deg = deg * pointer->inital_data.inital_data[0];
-								}
-								deducting_elem.inital_data[0] = deg;
-							}
-							break;
-						default:
-							deducting_elem.op = 'e';
-							break;
-					}
-				}
-				else
-				{
-					switch (pointer->inital_data.op)
-					{
-					//addition
-						case '+':
-							deducting_elem.inital_data[0] = pointer->inital_data.inital_data[0]+pointer->inital_data.inital_data[1];
-							break;
-							//difference
-						case '-':
-							deducting_elem.inital_data[0] = pointer->inital_data.inital_data[0]-pointer->inital_data.inital_data[1];
-							break;
-						//multiplication
-						case '*':
-							deducting_elem.inital_data[0] = pointer->inital_data.inital_data[0]*pointer->inital_data.inital_data[1];
-							break;
-						//division
-						case '/':
-							deducting_elem.inital_data[0] = pointer->inital_data.inital_data[0]/pointer->inital_data.inital_data[1];
-							break;
-						default:
-							deducting_elem.op = 'e';
-							break;
-					}
-				}
-			}
-			else
-			{
-				deducting_elem.op = 'e';
-			}
-			//adding new element to end of list
-			addlast(&deducting_list,deducting_elem);
+	stack* data_store = new_stack();
+
+	//main cycle
+	while(feof(input) == 0)
+	{
+		//variables definition
+		op = 0;
+		data = 0;
+		//reading numbers
+		fscanf(input, "%f", &data);
+		if(data == 0){
+			fscanf(input, "%c", &extra);
+
 		}
-		path = calloc(100, sizeof(char));
-		printf("enter the path to the file where the output will be placed:\n");
-		scanf(" %100s", path);
-		output = fopen(path, "w");
-		free(path);
-		pointer = inital_data;
-		////output working with vectors
-		while(pointer->next != NULL){
-			pointer = pointer->next;
-			deducting_list = deducting_list->next;
-			if(deducting_list->inital_data.op == 'e'){
-				fprintf(output, "error\n");
-			}
-			else if(pointer->inital_data.mode == 'v'){
-				fprintf(output, "( ");
-				for(int i = 0; i < pointer->inital_data.size; i++){
-					fprintf(output, "%f ", pointer->inital_data.inital_data[i]);
-				}
-				fprintf(output, ")");
-				fprintf(output, " %c ", pointer->inital_data.op);
-				fprintf(output, "( ");
-				for(int i = 0; i < pointer->inital_data.size; i++){
-					fprintf(output, "%f ", pointer->inital_data.inital_data[pointer->inital_data.size + i]);
-				}
-				fprintf(output, ") = ");
-				if(pointer->inital_data.op == '\''){
-					fprintf(output,"%f\n", deducting_list->inital_data.inital_data[0]);
-				} else {
-					fprintf(output, "( ");
-					for(int i = 0; i < pointer->inital_data.size; i++){
-						fprintf(output, "%f ", deducting_list->inital_data.inital_data[i]);
-					}
-					fprintf(output, ")\n");
-				}//output working with numbers
-			} else if (pointer->inital_data.mode == 's'){
-				if(pointer->inital_data.op == '!'){
-					fprintf(output, "%f! = %f\n", pointer->inital_data.inital_data[0], deducting_list->inital_data.inital_data[0]);
-				} else {
-					fprintf(output, "%f %c %f = %f\n", pointer->inital_data.inital_data[0],pointer->inital_data.op, pointer->inital_data.inital_data[1], deducting_list->inital_data.inital_data[0]);
-				}
-			}
+		//reading operations
+		fscanf(input, " %c", &op);
+		//calculations
+
+		if(op == '+')//addition
+		{
+			counter++;
+			num2 = findstack(&data_store);
+			num1 = findstack(&data_store);
+			add(&data_store, num1 + num2);
+			fprintf(output, "%i. %f + %f = %f\n", counter, num1, num2, num1 + num2);
 		}
-        //closing file and clearing memory
-		fclose(output);
-		free(inital_data);
-		free(pointer);
-		free(deducting_list);
-		//prompt to repeat the program and select new files
-        printf("start over?\n'y' - yes\'n' - no\n");
-		scanf(" %c", &repeat);
-    }
-    while(repeat == 'y');
-    return 0;
+		else if(op == '-')//subtraction
+		{
+			counter++;
+			num2 = findstack(&data_store);
+			num1 = findstack(&data_store);
+			add(&data_store, num1 - num2);
+			fprintf(output, "%i. %f - %f = %f\n", counter, num1, num2, num1 - num2);
+		}
+		else if(op == '*')//multiplication
+		{
+			counter++;
+			num2 = findstack(&data_store);
+			num1 = findstack(&data_store);
+			add(&data_store, num1 * num2);
+			fprintf(output, "%i. %f * %f = %f\n", counter, num1, num2, num1 * num2);
+		}
+		else if(op == '/')//division
+		{
+			counter++;
+			num2 = findstack(&data_store);
+			num1 = findstack(&data_store);
+			add(&data_store, num1 / num2);
+			fprintf(output, "%i. %f / %f = %f\n", counter, num1, num2, num1 / num2);
+		}
+		//adding to stack
+		else{
+			add(&data_store, data);
+		}
+		//reading a character
+		while(op != ' ')
+		{
+			fscanf(input, "%c", &op);
+		}
+	}
+	fclose(output);
+	fclose(input);
+	fprintf(output, "answer: %f", findstack(&data_store));
+	return 0;
 }
-
